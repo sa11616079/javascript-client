@@ -1,0 +1,90 @@
+.background {
+    display: flex;
+}
+
+.container {
+    background-color: white;
+    margin: 5%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.445);
+}
+
+.upper {
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    padding: 0px;
+    align-items: center;
+    border: .1px solid lightgray;
+}
+
+.checkout {
+    font-weight: bold;
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.path {
+    flex-grow: 5;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+ul.breadcrumb {
+    background-color: white;
+}
+
+ul.breadcrumb li {
+    display: inline;
+    font-size: 17px;
+}
+
+ul.breadcrumb li+li:before {
+    color: black;
+    padding: 10px;
+    content: "/\00a0";
+}
+
+.icon {
+    margin: 10px;
+    padding: 2px;
+    padding-right: 4px;
+    padding-left: 4px;
+    background-color: black;
+    border-radius: 4px;
+    font-size: 15px;
+    align-items: center;
+    color: white;
+}
+
+.lower {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border: 1px solid lightgray;
+    padding: 0px;
+    align-items: center;
+    height: 40px;
+    width: 100%;
+    border-top: 0px;
+}
+
+.lower--left {
+    padding: 10px;
+    font-size: 17px;
+    flex: 3;
+}
+
+.lower--right {
+    padding: 10px;
+    font-size: 17px;
+    background-color: rgba(211, 211, 211, 0.329);
+    flex: 1.9;
+}
