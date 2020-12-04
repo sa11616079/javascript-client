@@ -75,11 +75,6 @@ ul.breadcrumb li+li:before {
     border-top: 0px;
 }
 
-.lower--left {
-    margin: .1%;
-    /* flex: 3; */
-}
-
 .lower--left--upper {
     border-top: 0px;
     border-left: 0px;
@@ -107,22 +102,25 @@ ul.breadcrumb li+li:before {
 .lower--left--upper--discover{
     height: 130px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 180px;
+    flex-grow: 1;
 }
 
 .lower--left--upper--mastercard{
     height: 130px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 180px;
+    flex-grow: 1;
 }
 
 .lower--left--upper--visa{
     height: 130px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 180px;
+    flex-grow: 1;
 }
 
 .cardStatement {
@@ -185,7 +183,7 @@ ul.breadcrumb li+li:before {
     display: flex;
     flex-direction: column;
     flex: 1;
-    background-color: rgba(226, 224, 224, 0.356);
+    background-color: rgba(226, 224, 224, 0.295);
     border-top: 0px;
     border-right: 0px;
     border-bottom: 0px;
@@ -237,7 +235,6 @@ ul.breadcrumb li+li:before {
     margin-right: 8px;
 }
 
-
 .lower--right--prices-subtotal {
     flex-direction: row;
     display: flex;
@@ -274,4 +271,56 @@ ul.breadcrumb li+li:before {
     padding: 5px;
     font-weight: bold;
     justify-content: space-between;
+}
+
+@media screen and (max-width: 600px) {
+    .lower {
+        flex-direction: column-reverse;
+    }
+}
+
+@media (max-width: 500px ){
+    .lower--left--upper--cards{
+        flex-direction: row;
+    }    
+}
+
+@media screen and (min-width: 993){
+    .container{
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+}
+
+@media only screen and (max-width:992px){
+.container{
+    margin-left: 20px;
+    margin-right: 20px;
+    }
+}
+
+
+@media screen and (min-width: 992){
+.lower--right{
+    flex: 2;
+}
+.lower--left{
+    flex: 3;
+    }
+}
+
+@media screen and (min-width: 768) and (max-width: 992){
+    .lower--right{
+        flex: 1;
+    }
+    .lower--left{
+        flex: 1;
+    }
+}
+
+@media (max-width:756px){
+ul.breadcrumb {
+    display: none;
+    visibility: hidden;
+    }
 }
