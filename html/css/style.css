@@ -1,5 +1,6 @@
 .background {
     display: flex;
+    background-image: url('../../images//background.jpg');
 }
 
 .container {
@@ -70,21 +71,207 @@ ul.breadcrumb li+li:before {
     background-color: white;
     border: 1px solid lightgray;
     padding: 0px;
-    align-items: center;
-    height: 40px;
     width: 100%;
     border-top: 0px;
 }
 
-.paymentBlock {
-    padding: 10px;
-    font-size: 17px;
-    flex: 3;
+.lower--left {
+    margin: .1%;
+    /* flex: 3; */
 }
 
-.cart {
+.lower--left--upper {
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
+.wallet {
+    padding-left: 10px;
+    margin-top: 20px;
+    padding-bottom: 5px;
+    color: grey;
+    border-bottom: 1px solid lightgray;
+}
+
+.lower--left--upper--cards{
+    display: inline-block;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 20px;
+}
+.selected--card:hover{
     padding: 10px;
-    font-size: 17px;
-    background-color: rgba(211, 211, 211, 0.329);
-    flex: 1.9;
+    background-color: rgba(128, 128, 128, 0.116);
+}
+
+.lower--left--upper--discover{
+    height: 130px;
+    display: flex;
+    flex-direction: row;
+    width: 180px;
+}
+
+.lower--left--upper--mastercard{
+    height: 130px;
+    display: flex;
+    flex-direction: row;
+    width: 180px;
+}
+
+.lower--left--upper--visa{
+    height: 130px;
+    display: flex;
+    flex-direction: row;
+    width: 180px;
+}
+
+.cardStatement {
+    padding-left: 2px;
+    color: solid grey;
+    font-size: x-small;
+    text-align: center;
+    display: flex;
+}
+
+.NewCard {
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-top: 40px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    font-size: 15px;
+    color: grey;
+    border-bottom: 1px solid lightgray;
+}
+
+.lower--left--lower{
+    display: flex;
+    padding-top: 20px;
+    margin-left: 200px;
+}
+
+.card--details--inline{
+    width: 30%;
+    padding: 2% 2%;
+    margin: 2% 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.card--details{
+    width: 60%;
+    padding: 2% 2%;
+    margin: 2% 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.continue{
+    width: 60%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 2% 2%;
+    margin: 15px 0;
+    border: none;
+    cursor: pointer;
+}
+
+.lower--right {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background-color: rgba(226, 224, 224, 0.356);
+    border-top: 0px;
+    border-right: 0px;
+    border-bottom: 0px;
+    margin-left: 8px;
+}
+
+.lower--right--items {
+    flex-direction: row;
+    display: flex;
+}
+.products--image{
+    margin: 10px;
+}
+
+.lower--right--image {
+    height: 40px;
+    width: 40px;
+    border: 5px solid rgba(190, 186, 186, 0.801);
+}
+
+.lower--right--quantity {
+    color: black;
+    margin: 0px;
+    font-size: 15px;
+}
+
+.lower--right--product {
+    font-weight: bold;
+    font-size: 15px;
+    margin: 0px;
+    padding-top: 3px;
+}
+
+.lower--right--details {
+    margin-left: 10px;
+    padding-top: 5px;
+}
+
+.lower--right--itemColor {
+    color: gray;
+    font-size: 15px;
+    margin: 0px;
+    font-size: small;
+  
+}
+.lower--right--value {
+    margin-left: auto;
+    margin-top: -7px;
+    margin-right: 8px;
+}
+
+
+.lower--right--prices-subtotal {
+    flex-direction: row;
+    display: flex;
+    margin-left: 10px;
+    margin-right: 8px;
+    padding: 5px;
+    justify-content: space-between;
+}
+
+.lower--right--prices{
+    flex-direction: row;
+    display: flex;
+    margin-left: 10px;
+    margin-right: 8px;
+    padding: 5px;
+    justify-content: space-between;
+}
+
+.lower--right--prices-taxes{
+    flex-direction: row;
+    display: flex;
+    margin-left: 10px;
+    margin-right: 8px;
+    padding: 5px;
+    justify-content: space-between;
+}
+
+.lower--right--prices-total{
+    flex-direction: row;
+    display: flex;
+    margin-left: 10px;
+    margin-right: 8px;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-weight: bold;
+    justify-content: space-between;
 }
