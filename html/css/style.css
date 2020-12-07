@@ -1,6 +1,7 @@
 .background {
     display: flex;
     background-image: url('../../images//background.jpg');
+    font-family: Arial;
 }
 
 .container {
@@ -146,7 +147,7 @@ ul.breadcrumb li+li:before {
 .lower--left--lower{
     display: flex;
     padding-top: 20px;
-    margin-left: 200px;
+    margin-left: 190px;
 }
 
 .card--details--inline{
@@ -279,10 +280,35 @@ ul.breadcrumb li+li:before {
     }
 }
 
-@media (max-width: 500px ){
+@media (max-width: 400px ){
     .lower--left--upper--cards{
-        flex-direction: row;
-    }    
+        flex-direction: column;
+    }
+    
+    
+    .lower--left--upper--discover{
+        height: 80%;
+        display: block;
+        width: 80%;
+        padding: 2% 5% 8% 8%;
+        flex-grow: 1;
+    }
+  
+    .lower--left--upper--mastercard{
+        height: 80%;
+        display: block;
+        width: 80%;
+        padding: 2% 5% 8% 8%;
+        flex-grow: 1;
+    }
+  
+    .lower--left--upper--visa{
+        height: 80%;
+        display: block;
+        width: 80%;
+        padding: 2% 5% 8% 8%;
+        flex-grow: 1;
+    }
 }
 
 @media screen and (min-width: 993){
@@ -318,7 +344,7 @@ ul.breadcrumb li+li:before {
     }
 }
 
-@media (max-width:756px){
+@media (max-width:768px){
 ul.breadcrumb {
     display: none;
     visibility: hidden;
