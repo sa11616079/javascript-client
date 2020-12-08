@@ -227,8 +227,7 @@ ul.breadcrumb li+li:before {
     color: gray;
     font-size: 15px;
     margin: 0px;
-    font-size: small;
-  
+    font-size: small; 
 }
 .lower--right--value {
     margin-left: auto;
@@ -283,9 +282,7 @@ ul.breadcrumb li+li:before {
 @media (max-width: 400px ){
     .lower--left--upper--cards{
         flex-direction: column;
-    }
-    
-    
+    }   
     .lower--left--upper--discover{
         height: 80%;
         display: block;
@@ -293,15 +290,13 @@ ul.breadcrumb li+li:before {
         padding: 2% 5% 8% 8%;
         flex-grow: 1;
     }
-  
     .lower--left--upper--mastercard{
         height: 80%;
         display: block;
         width: 80%;
         padding: 2% 5% 8% 8%;
         flex-grow: 1;
-    }
-  
+    } 
     .lower--left--upper--visa{
         height: 80%;
         display: block;
@@ -324,7 +319,6 @@ ul.breadcrumb li+li:before {
     margin-right: 20px;
     }
 }
-
 
 @media screen and (min-width: 992){
 .lower--right{
