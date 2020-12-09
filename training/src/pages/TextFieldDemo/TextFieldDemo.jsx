@@ -7,7 +7,7 @@ function TextFieldDemo() {
   return (
     <>
       <Container>
-        <Slider altText="No Image" duration="2000" height="300" random banner={banners} defaultbanner={DEFAULT_BANNER_IMAGE} />
+        <Slider altText="No Image" duration="2000" height="200" random banner={banners} defaultbanner={DEFAULT_BANNER_IMAGE} />
         <Text>
           <p>This is Disabled Input</p>
         </Text>

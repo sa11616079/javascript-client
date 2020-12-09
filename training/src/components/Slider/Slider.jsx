@@ -71,7 +71,7 @@ Slider.defaultProps = {
   banner: [],
   defaultbanner: DEFAULT_BANNER_IMAGE,
   duration: 2000,
-  height: 300,
+  height: 200,
   random: false,
 };
 export default Slider;
