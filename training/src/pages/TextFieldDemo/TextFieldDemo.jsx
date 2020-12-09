@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { TextField } from '../../components';
+import React from 'react';
+import { TextField, Slider } from '../../components';
 import { Text, Container } from '../../components/TextField/style';
+import { banners, DEFAULT_BANNER_IMAGE } from '../../configs/constants';
 
-class TextFieldDemo extends Component {
-  render() {
-    return (
-      <>
+function TextFieldDemo() {
+  return (
+    <>
       <Container>
-      <Text>
+        <Slider altText="No Image" duration="2000" height="300" random banner={banners} defaultbanner={DEFAULT_BANNER_IMAGE} />
+        <Text>
           <p>This is Disabled Input</p>
         </Text>
         <TextField
@@ -28,10 +29,8 @@ class TextFieldDemo extends Component {
           error="Could not be greater than"
         />
       </Container>
-        
-      </>
-    );
-  }
+    </>
+  );
 }
 
 export default TextFieldDemo;
