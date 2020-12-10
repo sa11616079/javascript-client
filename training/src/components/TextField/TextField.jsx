@@ -6,20 +6,11 @@ const TextField = (props) => {
   const {
     value, disabled, error,
   } = props;
-  if (error && value) {
-    return (
-      <>
-        <Input type="text" value={value} />
-        <Error>{error}</Error>
-      </>
-    );
-  } if (value && !error && !disabled) {
-    return (
-      <Input type="text" value={value} />
-    );
-  }
   return (
-    <Input type="text" value={value} disabled={disabled} />
+    <>
+      <Input type="text" value={value} disabled={disabled} />
+      <Error>{error}</Error>
+    </>
   );
 };
 
