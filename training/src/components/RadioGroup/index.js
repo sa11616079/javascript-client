@@ -1,3 +1,4 @@
 import RadioGroup from './RadioGroup';
+import P from './style';
 
-export default RadioGroup;
+export { RadioGroup, P };
