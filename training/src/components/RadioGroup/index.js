@@ -1,4 +1,4 @@
-import RadioGroup from './RadioGroup';
+import RadioField from './RadioField';
 import P from './style';
 
-export { RadioGroup, P };
+export { RadioField, P };

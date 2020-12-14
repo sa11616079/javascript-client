@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Buttons } from './style';
 
-const Button = (props) => {
+const ButtonField = (props) => {
   const {
     color, disabled, style, value, onClick,
   } = props;
@@ -20,16 +20,16 @@ const Button = (props) => {
     </>
   );
 };
-Button.propTypes = {
+ButtonField.propTypes = {
   onClick: PropTypes.func.isRequired,
   color: PropTypes.string,
   disabled: PropTypes.bool,
   style: PropTypes.objectOf(PropTypes.string),
   value: PropTypes.string.isRequired,
 };
-Button.defaultProps = {
-  color: 'default' || 'primary',
+ButtonField.defaultProps = {
+  color: '',
   disabled: false,
   style: {},
 };
-export default Button;
+export default ButtonField;

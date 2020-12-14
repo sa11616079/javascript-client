@@ -1,45 +1,38 @@
 import styled, { css } from 'styled-components';
 
 export const Buttons = styled.button`
-${(props) => props.type === 'cancel'
+${(props) => props.type === 'Cancel'
     && css`
-background-color: lightgrey;
-border: none;
-color: black;
-padding: 12px;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
-margin: 4px 2px;
-cursor: pointer;
-border-radius: 5px;
+    background-color: lightgrey;
+    border: none;
+    color: black;
+    padding: 12px;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 5px;
 `};
 ${(props) => props.disabled === true
-    && props.type === 'submit'
+    && props.type === 'Submit'
     && css`
-background-color: #d0d3d4;
-border: none;
-color: #b3b6b7;
-padding: 12px;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
-margin: 4px 2px;
-cursor: pointer;
-border-radius: 5px;
+    background: #D0D3D4;
+    color: #B3B6B7;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    margin: 10px 2px;
+    border-radius: 5px;
+    margin-left: 8px;
+    
 `};
 ${(props) => props.disabled === false
-    && props.type === 'submit'
+    && props.type === 'Submit'
     && css`
-background-color: #4caf50;
-border: none;
-color: white;
-padding: 12px;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
-margin: 4px 2px;
-cursor: pointer;
-border-radius: 5px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 6px;
 `};
 `;

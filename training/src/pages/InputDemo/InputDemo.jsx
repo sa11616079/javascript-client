@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { TextField } from '../../components';
+import {
+  TextField, ButtonField, RadioField, SelectField,
+} from '../../components/index';
 import { Text } from '../../components/TextField/style';
-import SelectField from '../../components/SelectField/index';
-import { RadioGroup } from '../../components/RadioGroup/index';
 import {
   schema, selectOptions, radioOptionsCricket, radioOptionsFootball,
 } from '../../configs/constants';
-import { Button } from '../../components/button/index';
 
 class InputDemo extends React.Component {
   constructor(props) {
@@ -79,7 +78,7 @@ class InputDemo extends React.Component {
 
   isTouched = (field) => {
     const { touched } = this.state;
-    console.log('toyuched', touched);
+    console.log('touched', touched);
     this.setState({
       touched: {
         ...touched,
@@ -97,7 +96,7 @@ class InputDemo extends React.Component {
 
   render() {
     const {
-      name, sport, error,
+      name, sport, error, isvalid,
     } = this.state;
     return (
       <>
@@ -125,7 +124,7 @@ class InputDemo extends React.Component {
             (sport === '' || sport === 'Select') ? '' : (
               <>
                 <p><b>What you do?</b></p>
-                <RadioGroup
+                <RadioField
                   onChange={this.handlePositionChange}
                   options={this.RadioOption()}
                   onBlur={() => this.isTouched('sport')}
@@ -136,8 +135,8 @@ class InputDemo extends React.Component {
           }
         </div>
         <div align="right">
-          <Button value="cancel" />
-          <Button value="submit" />
+          <ButtonField value="Cancel" onClick={() => {}} />
+          <ButtonField value="Submit" disabled={!isvalid} onClick={() => {}} />
         </div>
       </>
     );

@@ -1,4 +1,3 @@
-import Button from './button';
-import { Buttons } from './style';
+import ButtonField from './button';
 
-export { Button, Buttons };
+export { ButtonField };
