@@ -14,7 +14,17 @@ export default class CalculatorDemo extends React.Component {
     return (
       <>
         <Text first={7} second={4} operator="+" />
-        <Text first={7} second={3} operator="-" />
+        <ThemeProvider theme={Theme}>
+          <Text first={7} second={3} operator="-">
+            {
+              (first, second, result) => (
+                <p>
+                  {`Substraction of ${first} and ${second} is equal to ${result}`}
+                </p>
+              )
+            }
+          </Text>
+        </ThemeProvider>
         <Text first={7} second={20} operator="*" />
         <Text first={7} second={0} operator="/" />
         <Text first={7} second={4} operator="+" />
@@ -23,18 +33,7 @@ export default class CalculatorDemo extends React.Component {
             {
               (first, second, result) => (
                 <p>
-                  Sum of
-                  {' '}
-                  {`${first}`}
-                  {' '}
-                  and
-                  {' '}
-                  {`${second}`}
-                  {' '}
-                  is equal to
-                  {' '}
-                  {`${result}`}
-                  {' '}
+                  {`Sum of ${first} and ${second} is equal to ${result}`}
                 </p>
               )
             }
