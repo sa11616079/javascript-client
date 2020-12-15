@@ -1,1 +1,2 @@
-export { TextField } from './TextField';
+export { TextField } from './TextField/index';
+export { Slider } from './Slider/index';
