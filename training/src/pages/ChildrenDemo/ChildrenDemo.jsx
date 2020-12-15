@@ -17,26 +17,7 @@ export default class CalculatorDemo extends React.Component {
         <Text first={7} second={3} operator="-" />
         <Text first={7} second={20} operator="*" />
         <Text first={7} second={0} operator="/" />
-        <Text first={7} second={4} operator="+">
-          {
-            (first, second, result) => (
-              <p>
-                Sum of
-                {' '}
-                {first}
-                {' '}
-                and
-                {' '}
-                {second}
-                {' '}
-                is equal to
-                {' '}
-                {result}
-                {' '}
-              </p>
-            )
-          }
-        </Text>
+        <Text first={7} second={4} operator="+" />
         <ThemeProvider theme={Theme}>
           <Text first={10} second={20} operator="+">
             {
@@ -44,15 +25,15 @@ export default class CalculatorDemo extends React.Component {
                 <p>
                   Sum of
                   {' '}
-                  {first}
+                  {`${first}`}
                   {' '}
                   and
                   {' '}
-                  {second}
+                  {`${second}`}
                   {' '}
                   is equal to
                   {' '}
-                  {result}
+                  {`${result}`}
                   {' '}
                 </p>
               )

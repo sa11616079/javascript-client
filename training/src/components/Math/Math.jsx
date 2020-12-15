@@ -23,15 +23,15 @@ const Text = (props) => {
     <>
       <p>
         {' '}
-        {first}
+        {`${first}`}
         {' '}
-        {operator}
+        {`${operator}`}
         {' '}
-        {second}
+        {`${second}`}
         {' '}
         =
         {' '}
-        {result}
+        {`${result}`}
         {' '}
       </p>
     </>
