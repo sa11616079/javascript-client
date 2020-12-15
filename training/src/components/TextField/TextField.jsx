@@ -4,23 +4,24 @@ import { Error, Input } from './style';
 
 const TextField = (props) => {
   const {
-    value, disabled, error,
+    disabled, error, onChange,
   } = props;
   return (
     <>
-      <Input type="text" value={value} disabled={disabled} />
+      <Input type="text" onChange={onChange} defaultValue="" disabled={disabled} />
       <Error>{error}</Error>
     </>
   );
 };
 
 TextField.propTypes = {
-  disabled: PropTypes.bool.isRequired,
-  value: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
   error: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
 };
 
 TextField.defaultProps = {
+  disabled: false,
   error: '',
 };
 

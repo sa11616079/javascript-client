@@ -7,7 +7,7 @@ margin: 8px 0;
 font-family: Arial, Helvetica, sans-serif;
 `;
 const Text = styled.div`
-font-size: 15px;
+font-size: 18px;
 font-weight: bold;
 `;
 const Error = styled.p`
@@ -32,6 +32,12 @@ ${(props) => props.value === '101'
         && css`
     border: 1px solid #ffb3b3;
     color: black;
+`};
+${(props) => props.type === 'text'
+&& css`
+  background-color: white;
+  border: 1px solid #8c8c8c;
+  box-sizing: border-box;
 `};
 `;
 export {
