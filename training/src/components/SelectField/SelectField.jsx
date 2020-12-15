@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from './style';
+import Select, { Error } from './style';
 
 const SelectField = (props) => {
   const {
-    options, defaultOptions, onChange, values,
+    options, defaultOptions, onChange, values, onBlur, error,
   } = props;
   return (
     <>
-      <Select defaultValue={values} onChange={onChange}>
+      <Select value={values} onChange={onChange} onBlur={onBlur}>
         {defaultOptions && <option>{defaultOptions}</option>}
         {
           options && options.length && options.map(({ value, label }) => (
@@ -16,19 +16,23 @@ const SelectField = (props) => {
           ))
         }
       </Select>
+      <Error>
+        {error}
+      </Error>
     </>
   );
 };
 
 SelectField.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.object),
+  options: PropTypes.arrayOf(PropTypes.object).isRequired,
   defaultOptions: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  values: PropTypes.string,
+  values: PropTypes.string.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  error: PropTypes.string,
 };
 SelectField.defaultProps = {
-  values: 'Default values',
-  options: [],
+  error: '',
 };
 
 export default SelectField;

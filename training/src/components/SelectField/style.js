@@ -9,4 +9,9 @@ border: 1px solid #ccc;
 border-radius: 4px;
 box-sizing: border-box;
 `;
+const Error = styled.div`
+color: red;
+`;
+
+export { Error };
 export default Select;

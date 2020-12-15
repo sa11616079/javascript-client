@@ -1,10 +1,12 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { TextField } from '../../components';
+import {
+  TextField, ButtonField, RadioField, SelectField,
+} from '../../components/index';
 import { Text } from '../../components/TextField/style';
-import SelectField from '../../components/SelectField/index';
-import RadioGroup from '../../components/RadioGroup/index';
-import { selectOptions, radioOptionsCricket, radioOptionsFootball } from '../../configs/constants';
+import {
+  schema, selectOptions, radioOptionsCricket, radioOptionsFootball,
+} from '../../configs/constants';
 
 class InputDemo extends React.Component {
   constructor(props) {
@@ -14,6 +16,14 @@ class InputDemo extends React.Component {
       sport: '',
       cricket: '',
       football: '',
+      error: {},
+      isvalid: false,
+      touched: {
+        name: false,
+        sport: false,
+        cricket: false,
+        football: false,
+      },
     };
     console.log(this.state);
   }
@@ -48,36 +58,85 @@ class InputDemo extends React.Component {
     return (radioValue);
   };
 
+  hasErrors = () => {
+    const { touched } = this.state;
+    const errormsg = {};
+    schema.validate(this.state, { abortEarly: false })
+      .then(() => {
+        this.setState({ error: {}, isvalid: true });
+      })
+      .catch((err) => {
+        err.inner.forEach((element) => {
+          const { path, message } = element;
+          if (touched[path]) {
+            errormsg[path] = message;
+          }
+        });
+        this.setState({ error: errormsg, isvalid: false });
+      });
+  }
+
+  isTouched = (field) => {
+    const { touched } = this.state;
+    console.log('touched', touched);
+    this.setState({
+      touched: {
+        ...touched,
+        [field]: true,
+      },
+    }, () => {
+      this.hasErrors();
+    });
+  }
+
+  getErrors = (field) => {
+    const { touched, error } = this.state;
+    return touched[field] ? error[field] : '';
+  }
+
   render() {
-    const { sport } = this.state;
+    const {
+      name, sport, error, isvalid,
+    } = this.state;
     return (
       <>
+
+        <Text><p>Name</p></Text>
+        <TextField
+          onChange={this.handleNameChange}
+          value={name}
+          error={error.name}
+          onBlur={() => this.isTouched('name')}
+        />
+        <Text>
+          <p>Select the game you play?</p>
+        </Text>
+        <SelectField
+          defaultOptions="Select"
+          onChange={this.handleSportChange}
+          value={sport}
+          onBlur={() => this.isTouched('sport')}
+          options={selectOptions}
+          error={error.sport}
+        />
         <div>
-          <Text><p>Name</p></Text>
-          <TextField
-            onChange={this.handleNameChange}
-          />
-          <Text>
-            <p>Select the game you play?</p>
-          </Text>
-          <SelectField
-            defaultOptions="Select"
-            onChange={this.handleSportChange}
-            options={selectOptions}
-          />
-          <div>
-            {
-              (sport === '' || sport === 'Select') ? '' : (
-                <>
-                  <p><b>What you do?</b></p>
-                  <RadioGroup
-                    options={this.RadioOption()}
-                    onChange={this.handlePositionChange}
-                  />
-                </>
-              )
-            }
-          </div>
+          {
+            (sport === '' || sport === 'Select') ? '' : (
+              <>
+                <p><b>What you do?</b></p>
+                <RadioField
+                  onChange={this.handlePositionChange}
+                  options={this.RadioOption()}
+                  onBlur={() => this.isTouched('sport')}
+                  error={error.sport}
+                />
+              </>
+            )
+          }
+        </div>
+        <div align="right">
+          <ButtonField value="Cancel" onClick={() => {}} />
+          <ButtonField value="Submit" disabled={!isvalid} onClick={() => {}} />
         </div>
       </>
     );
