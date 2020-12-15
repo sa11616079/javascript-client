@@ -1,9 +1,10 @@
 import React from 'react';
-import { InputDemo } from './pages';
+// import { InputDemo } from './pages';
+import ChildrenDemo from './pages/ChildrenDemo/ChildrenDemo';
 
 function App() {
   return (
-    <InputDemo />
+    <ChildrenDemo />
   );
 }
 
