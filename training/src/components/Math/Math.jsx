@@ -22,17 +22,7 @@ const Text = (props) => {
   return (
     <>
       <p>
-        {' '}
-        {first}
-        {' '}
-        {operator}
-        {' '}
-        {second}
-        {' '}
-        =
-        {' '}
-        {result}
-        {' '}
+        {` ${first} ${operator} ${second} = ${result}`}
       </p>
     </>
   );
