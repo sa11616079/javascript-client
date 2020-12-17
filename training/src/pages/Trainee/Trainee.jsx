@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import AddDialog from './components/AddDialog/AddDialog';
+import { AddDialog } from './components/index';
 
 class Trainee extends Component {
   constructor(props) {

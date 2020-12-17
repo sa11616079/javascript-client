@@ -9,40 +9,25 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import { withStyles } from '@material-ui/core/styles';
-// import FormControl from '@material-ui/core/FormControl';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import PropTypes from 'prop-types';
+import DialogContent from '@material-ui/core/DialogContent';
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
-  name: yup.string().required('Please Enter your Name'),
+  name: yup.string().required('Name is required field'),
+  email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{5,10}[.]{1,1}[A-Za-z]{3,4}$/, 'Email Address must be valid field'),
+  password: yup.string().required('Password is required field').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,}$/,
+    'Must contain 8 characters at least one uppercase one lowercase and one number'),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required field'),
 });
 
-// eslint-disable-next-line no-unused-vars
-// const useStyles = () => ({
-//   root: {
-//     flexGrow: 1,
-//   },
-// });
 const useStyles = () => ({
-  TextField: {
-    width: 900,
-    marginLeft: 30,
+  root: {
+    flexGrow: 1,
   },
   input: {
     paddingRight: 10,
-  },
-  textField: {
-    width: 435,
-    marginLeft: 30,
-  },
-  Error: {
-    fontSize: 15,
-    color: 'red',
-  },
-  Details: {
-    marginLeft: 25,
-    marginBottom: 0,
   },
 });
 
@@ -51,21 +36,25 @@ class AddDialog extends Component {
     super(props);
     this.state = {
       name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
       isOpen: false,
       error: {
         name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
       },
       hasError: false,
       touched: {
         name: false,
+        email: false,
+        password: false,
+        confirmPassword: false,
       },
     };
   }
-
-  // handleNameChange = (e) => {
-  //   this.setState({ name: e.target.value }, () => {
-  //   });
-  // }
 
   handleBlur = (field) => {
     const { touched } = this.state;
@@ -125,10 +114,9 @@ class AddDialog extends Component {
 
   render() {
     const { classes } = this.props;
-    // const classes = useStyles();
-    const { isOpen, onClose } = this.props;
+    const { isOpen, onClose, onSubmit } = this.props;
     const {
-      name, error,
+      name, error, hasError, email, password, confirmPassword,
     } = this.state;
     this.hasErrors();
     return (
@@ -139,97 +127,123 @@ class AddDialog extends Component {
         maxWidth="md"
       >
         <DialogTitle id="simple-dialog-title">Add Trainee</DialogTitle>
-        <DialogContentText className={classes.Details}>
-          Enter your trainee details
-        </DialogContentText>
-        <TextField
-          id="outlined-full-width"
-          label="Name *"
-          type="text"
-          autoComplete="off"
-          value={name}
-          error={error.name}
-          helperText={this.getError('name')}
-          onBlur={() => this.isTouched('name')}
-          onChange={this.handleChange('name')}
-          className={classes.TextField}
-          placeholder=""
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          InputProps={{
-            startAdornment: (
-              <PersonIcon className={classes.input} />
-            ),
-          }}
-          variant="outlined"
-        />
-        <TextField
-          id="outlined-full-width"
-          label="Email Address"
-          type="text"
-          autoComplete="off"
-          className={classes.TextField}
-          placeholder=""
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          InputProps={{
-            startAdornment: (
-              <EmailIcon className={classes.input} />
-            ),
-          }}
-          variant="outlined"
-        />
-        <Grid container spacing={12}>
-          <Grid>
-            <TextField
-              id="outlined-full-width"
-              label="Password"
-              type="password"
-              autoComplete="off"
-              className={classes.textField}
-              placeholder=""
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              InputProps={{
-                startAdornment: (
-                  <VisibilityOffIcon className={classes.input} />
-                ),
-              }}
-              variant="outlined"
-            />
+        <DialogContent className={classes.root}>
+          <DialogContentText className={classes.Details}>
+            Enter your trainee details
+          </DialogContentText>
+          <TextField
+            id="outlined-full-width"
+            label="Name *"
+            type="text"
+            autoComplete="off"
+            fullWidth
+            value={name}
+            error={error.name}
+            helperText={this.getError('name')}
+            onBlur={() => this.isTouched('name')}
+            onChange={this.handleChange('name')}
+            placeholder=""
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              startAdornment: (
+                <PersonIcon className={classes.input} />
+              ),
+            }}
+            variant="outlined"
+          />
+          <TextField
+            id="outlined-full-width"
+            label="Email Address"
+            type="text"
+            autoComplete="off"
+            fullWidth
+            value={email}
+            error={error.email}
+            helperText={this.getError('email')}
+            onBlur={() => this.isTouched('email')}
+            onChange={this.handleChange('email')}
+            placeholder=""
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              startAdornment: (
+                <EmailIcon className={classes.input} />
+              ),
+            }}
+            variant="outlined"
+          />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                id="outlined-full-width"
+                label="Password"
+                type="password"
+                autoComplete="off"
+                fullWidth
+                value={password}
+                error={error.password}
+                helperText={this.getError('password')}
+                onBlur={() => this.isTouched('password')}
+                onChange={this.handleChange('password')}
+                placeholder=""
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <VisibilityOffIcon className={classes.input} />
+                  ),
+                }}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                id="outlined-full-width"
+                label="Confirm Password"
+                autoComplete="off"
+                fullWidth
+                type="password"
+                value={confirmPassword}
+                error={error.confirmPassword}
+                helperText={this.getError('confirmPassword')}
+                onBlur={() => this.isTouched('confirmPassword')}
+                onChange={this.handleChange('confirmPassword')}
+                placeholder=""
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <VisibilityOffIcon className={classes.input} />
+                  ),
+                }}
+                variant="outlined"
+              />
+            </Grid>
           </Grid>
-          <Grid>
-            <TextField
-              id="outlined-full-width"
-              label="Confirm Password"
-              autoComplete="off"
-              type="password"
-              className={classes.textField}
-              placeholder=""
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              InputProps={{
-                startAdornment: (
-                  <VisibilityOffIcon className={classes.input} />
-                ),
-              }}
-              variant="outlined"
-            />
-          </Grid>
-        </Grid>
+        </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button color="primary" disabled>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              onSubmit({
+                name, email, password, confirmPassword,
+              });
+            }}
+            disabled={hasError}
+          >
             Submit
           </Button>
         </DialogActions>
@@ -241,5 +255,6 @@ AddDialog.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 export default withStyles(useStyles)(AddDialog);
