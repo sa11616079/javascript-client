@@ -4,19 +4,21 @@ const Container = styled.div`
 width: 100%;
 padding: 12px 12px;
 margin: 8px 0;
-font-family: Arial, Helvetica, sans-serif;
 `;
 const Text = styled.div`
-font-size: 18px;
+margin-left: 30px;
+font-size: 16px;
 font-weight: bold;
 `;
 const Error = styled.p`
+margin-left: 30px;
 font-size: 15px;
 color: red;
 `;
 const Input = styled.input`
-width: 98%;
+width: 95%;
 padding: 0.7%;
+margin-left: 30px;
 border-radius: 5px;
 ${(props) => props.value === 'Disabled input'
         && css`

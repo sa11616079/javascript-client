@@ -3,7 +3,7 @@ import React from 'react';
 import {
   TextField, ButtonField, RadioField, SelectField,
 } from '../../components/index';
-import { Text } from '../../components/TextField/style';
+import { Text, Error } from '../../components/TextField/style';
 import {
   schema, selectOptions, radioOptionsCricket, radioOptionsFootball,
 } from '../../configs/constants';
@@ -119,14 +119,14 @@ class InputDemo extends React.Component {
     }
     return (
       <>
-        <p><b>What you do?</b></p>
+        <Text><p>What you do?</p></Text>
         <RadioField
           onChange={this.handlePositionChange('football')}
           value={football}
           options={this.RadioOption('football')}
           onBlur={() => this.isTouched('football')}
-          error={this.getErrors('football')}
         />
+        <Error>{this.getErrors('football')}</Error>
       </>
     );
   }
@@ -141,14 +141,14 @@ class InputDemo extends React.Component {
     }
     return (
       <>
-        <p><b>What you do?</b></p>
+        <Text><p>What you do?</p></Text>
         <RadioField
           onChange={this.handlePositionChange}
           value={cricket}
           options={this.RadioOption()}
-          error={this.getErrors('cricket')}
           onBlur={() => this.isTouched('cricket')}
         />
+        <Error>{this.getErrors('cricket')}</Error>
       </>
     );
   }
@@ -162,7 +162,7 @@ class InputDemo extends React.Component {
     return (
       <>
 
-        <Text><p>Name</p></Text>
+        <Text><p>Name *</p></Text>
         <TextField
           onChange={this.handleNameChange}
           value={name}
@@ -170,7 +170,7 @@ class InputDemo extends React.Component {
           onBlur={() => this.isTouched('name')}
         />
         <Text>
-          <p>Select the game you play?</p>
+          <p>Select the game you play? *</p>
         </Text>
         <SelectField
           defaultOptions="Select"
@@ -184,7 +184,7 @@ class InputDemo extends React.Component {
         {this.renderFootball}
         <div align="right">
           <ButtonField value="Cancel" onClick={() => {}} />
-          <ButtonField value="Submit" color="primary" disabled={!this.hasErrors()} onClick={() => {}} />
+          <ButtonField value="Submit" color="primary" disabled={!this.hasErrors()} onClick={() => {}} style={{ marginRight: 30 }} />
         </div>
       </>
     );
