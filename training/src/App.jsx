@@ -20,13 +20,13 @@ const App = () => (
     <Router>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/Trainee" />
+          <Redirect to="/trainee" />
         </Route>
         <AuthRoute path="/login" component={Login} />
         <PrivateRoute path="/ChildrenDemo" component={ChildrenDemo} />
         <PrivateRoute path="/TextFieldDemo" component={TextFieldDemo} />
         <PrivateRoute path="/InputDemo" component={InputDemo} />
-        <PrivateRoute path="/Trainee" component={Trainee} />
+        <PrivateRoute path="/trainee" component={Trainee} />
         <PrivateRoute component={NoMatch} />
       </Switch>
     </Router>
