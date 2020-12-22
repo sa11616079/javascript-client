@@ -2,9 +2,20 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import { Table } from '../Table/index';
 import { AddDialog } from './components/index';
 import traineeData from './data/trainee';
 
+const useStyles = (theme) => ({
+  traineeButton: {
+    marginRight: theme.spacing(2.5),
+    marginBottom: theme.spacing(2),
+  },
+  dialog: {
+    textAlign: 'right',
+  },
+});
 class TraineeList extends Component {
   constructor(props) {
     super(props);
@@ -28,42 +39,53 @@ class TraineeList extends Component {
     );
   }
 
-  renderTrainees = () => {
-    <ul>
-      {
-        traineeData.map((trainee) => this.renderTrainee(trainee))
-      }
-    </ul>;
+  renderTrainees() {
+    return (
+      <ul>
+        {
+          traineeData.map((trainee) => this.renderTrainee(trainee))
+        }
+      </ul>
+    );
   }
 
   render() {
     const { isOpen } = this.state;
-    const { match: { url } } = this.props;
+    const { classes } = this.props;
     return (
       <>
-        <Button variant="outlined" color="primary" onClick={() => this.setState({ isOpen: true })}>
-          ADD TRAINEE
-        </Button>
-        {this.renderTrainees()}
-        <AddDialog
-          onClose={this.handleClose}
-          isOpen={isOpen}
-          onSubmit={this.handleUser}
+        <div className={classes.dialog}>
+          <Button className={classes.traineeButton} variant="outlined" color="primary" onClick={() => this.setState({ isOpen: true })}>
+            ADD TRAINEELIST
+          </Button>
+          <AddDialog
+            onClose={this.handleClose}
+            isOpen={isOpen}
+            onSubmit={this.handleUser}
+          />
+        </div>
+        <Table
+          id="id"
+          data={traineeData}
+          columns={[
+            {
+              field: 'name',
+              lable: 'Name',
+              align: 'center',
+            },
+            {
+              field: 'email',
+              lable: 'Email Address',
+            },
+          ]}
         />
-        <ul>
-          {traineeData.map(({ name, id }) => (
-            <li key={id}>
-              <Link to={`${url}/${id}`}>
-                {name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div style={{ marginLeft: 15 }}>{this.renderTrainees()}</div>
       </>
     );
   }
 }
 TraineeList.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
-export default TraineeList;
+export default withStyles(useStyles)(TraineeList);
