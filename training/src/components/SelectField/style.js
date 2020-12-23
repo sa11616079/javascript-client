@@ -1,17 +1,19 @@
 import styled from 'styled-components';
 
 const Select = styled.select`
-width: 100%;
-padding: 12px 20px;
-margin: 8px 0;
+width: 95%;
+padding: 0.7%;
+margin-left: 30px;
 display: inline-block;
 border: 1px solid #ccc;
 border-radius: 4px;
 box-sizing: border-box;
 `;
 const Error = styled.div`
+margin-left: 30px;
+margin-top: 15px;
+font-size: 15px;
 color: red;
 `;
 
-export { Error };
-export default Select;
+export { Error, Select };

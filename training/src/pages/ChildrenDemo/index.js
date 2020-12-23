@@ -1,3 +1,3 @@
 import ChildrenDemo from './ChildrenDemo';
 
-export default ChildrenDemo;
+export { ChildrenDemo };

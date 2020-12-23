@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Error from './style';
+import { Error, Container } from './style';
 
 const RadioField = (props) => {
   const {
@@ -8,22 +8,24 @@ const RadioField = (props) => {
   } = props;
   return (
     <>
-      {
-        options && options.length && options.map(({ value, label }) => (
-          <Fragment key={label}>
-            <input
-              type="radio"
-              name="game"
-              value={value}
-              onChange={onChange}
-              onBlur={onBlur}
-            />
-            {label}
-            <br />
-          </Fragment>
-        ))
-      }
-      <Error>{error}</Error>
+      <Container>
+        {
+          options && options.length && options.map(({ value, label }) => (
+            <Fragment key={label}>
+              <input
+                type="radio"
+                name="game"
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
+              {label}
+              <br />
+            </Fragment>
+          ))
+        }
+        <Error>{error}</Error>
+      </Container>
     </>
   );
 };

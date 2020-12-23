@@ -27,7 +27,7 @@ const useStyles = () => ({
     flexGrow: 1,
   },
   input: {
-    paddingRight: 10,
+    paddingRight: 5,
   },
 });
 
