@@ -237,10 +237,6 @@ class AddDialog extends Component {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => {
-              onSubmit({
-                name, email, password, confirmPassword,
-              });
             }}
             disabled={hasError}
           >
