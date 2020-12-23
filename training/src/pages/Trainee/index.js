@@ -1,3 +1,3 @@
-import Trainee from './Trainee';
+import { Trainee } from './Trainee';
 
 export { Trainee };
