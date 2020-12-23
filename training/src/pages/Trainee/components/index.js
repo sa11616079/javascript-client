@@ -1,3 +1,3 @@
-import { AddDialog } from './AddDialog/index';
+import { AddDialog, EditDialog } from './AddDialog/index';
 
-export { AddDialog };
+export { AddDialog, EditDialog };
