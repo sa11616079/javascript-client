@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Table } from '../Table/index';
 import { AddDialog } from './components/index';
 import traineeData from './data/trainee';
+import { getDateFormatted } from '../../libs/utils/getDateFormatted';
 
 const useStyles = (theme) => ({
   traineeButton: {
@@ -21,11 +23,26 @@ class TraineeList extends Component {
     super(props);
     this.state = {
       isOpen: false,
+      selected: '',
+      orderBy: '',
+      order: '',
     };
   }
 
   handleClose = () => {
     this.setState({ isOpen: false });
+  }
+
+  handleSelect = (event, data) => {
+    this.setState({ selected: event.target.value }, () => console.log('datdd ... ', data));
+  };
+
+  handleSort = (field) => () => {
+    const { order } = this.state;
+    this.setState({
+      orderBy: field,
+      order: order === 'asc' ? 'desc' : 'asc',
+    });
   }
 
   renderTrainee = (trainee) => {
@@ -50,7 +67,7 @@ class TraineeList extends Component {
   }
 
   render() {
-    const { isOpen } = this.state;
+    const { isOpen, order, orderBy } = this.state;
     const { classes } = this.props;
     return (
       <>
@@ -71,15 +88,25 @@ class TraineeList extends Component {
             {
               field: 'name',
               lable: 'Name',
-              align: 'center',
             },
             {
               field: 'email',
               lable: 'Email Address',
+              format: (value) => value && value.toUpperCase(),
+            },
+            {
+              field: 'createdAt',
+              lable: 'Date',
+              align: 'right',
+              format: getDateFormatted,
             },
           ]}
+          orderBy={orderBy}
+          order={order}
+          onSort={this.handleSort}
+          onSelect={this.handleSelect}
         />
-        <div style={{ marginLeft: 15 }}>{this.renderTrainees()}</div>
+        {/* <div style={{ marginLeft: 15 }}>{this.renderTrainees()}</div> */}
       </>
     );
   }
