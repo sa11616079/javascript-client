@@ -43,8 +43,8 @@ class TableComponent extends Component {
 
   render() {
     const {
-      columns, classes, order, orderBy, onSort, onSelect,
-      actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
+      id, columns, classes, order, orderBy, onSort, onSelect,
+      actions, data, count, rowsPerPage, page, onChangePage,
     } = this.props;
     return (
       <TableContainer component={Paper} className={classes.tableContainer}>
@@ -73,10 +73,10 @@ class TableComponent extends Component {
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ? data.slice()
               : data
             ).map((item) => (
-              <TableRow hover className={classes.tableRow}>
+              <TableRow className={classes.tableRow} key={item[id]}>
                 {
                   columns && columns.length && columns.map(({ align, field, format }) => (
                     <TableCell onClick={(event) => onSelect(event, item.name)} align={align} component="th" scope="row" order={order} ordery={orderBy}>
@@ -86,7 +86,7 @@ class TableComponent extends Component {
                 }
                 {actions && actions.length && actions.map(({ icon, handler }) => (
                   <TableRow>
-                    <Button onClick={() => handler()}>
+                    <Button onClick={() => handler(item)}>
                       {icon}
                     </Button>
                   </TableRow>
@@ -100,7 +100,6 @@ class TableComponent extends Component {
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={onChangePage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
           />
         </Table>
       </TableContainer>
@@ -108,18 +107,18 @@ class TableComponent extends Component {
   }
 }
 TableComponent.propTypes = {
+  id: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   actions: PropTypes.arrayOf(PropTypes.object).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']),
+  order: PropTypes.string,
   orderBy: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   count: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
-  onChangeRowsPerPage: PropTypes.func.isRequired,
   onChangePage: PropTypes.func.isRequired,
 };
 TableComponent.defaultProps = {

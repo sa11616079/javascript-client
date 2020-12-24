@@ -132,7 +132,6 @@ class AddDialog extends Component {
             Enter your trainee details
           </DialogContentText>
           <TextField
-            id="outlined-full-width"
             label="Name *"
             type="text"
             autoComplete="off"
@@ -155,7 +154,6 @@ class AddDialog extends Component {
             variant="outlined"
           />
           <TextField
-            id="outlined-full-width"
             label="Email Address"
             type="text"
             autoComplete="off"
@@ -180,7 +178,6 @@ class AddDialog extends Component {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField
-                id="outlined-full-width"
                 label="Password"
                 type="password"
                 autoComplete="off"
@@ -205,7 +202,6 @@ class AddDialog extends Component {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                id="outlined-full-width"
                 label="Confirm Password"
                 autoComplete="off"
                 fullWidth

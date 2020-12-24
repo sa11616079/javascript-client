@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
@@ -6,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Table } from '../Table/index';
-import { AddDialog, EditDialog } from './components/index';
+import { AddDialog, EditDialog, DeleteDialog } from './components/index';
 import traineeData from './data/trainee';
 import { getDateFormatted } from '../../libs/utils/getDateFormatted';
 
@@ -25,12 +26,14 @@ class TraineeList extends Component {
     this.state = {
       isOpen: false,
       EditOpen: false,
-      // selected: '',
+      DeleteOpen: false,
+      selected: '',
       orderBy: '',
       order: '',
       page: 0,
       rowsPerPage: 10,
       editData: {},
+      deleteData: {},
     };
   }
 
@@ -38,12 +41,24 @@ class TraineeList extends Component {
     this.setState({ isOpen: false });
   }
 
-  handleEditButton = () => {
-    this.setState({ EditOpen: false });
+  handleEditButton = (data) => {
+    this.setState({ EditOpen: false }, () => { console.log('Edited Item ', data.data); });
   }
+
+  handleDeleteButton = (data) => {
+    this.setState({ DeleteOpen: false }, () => { console.log('Deleted Item ', data.data); });
+  };
+
+  handleSelect = (event, data) => {
+    this.setState({ selected: event.target.value }, () => console.log(data, this.state));
+  };
 
   handleEditDialogOpen = (data) => {
     this.setState({ EditOpen: true, editData: data });
+  }
+
+  handleRemoveDialogOpen = (data) => {
+    this.setState({ DeleteOpen: true, deleteData: data });
   }
 
   handleSort = (field) => () => {
@@ -57,14 +72,6 @@ class TraineeList extends Component {
   handleChangePage = (event, newPage) => {
     this.setState({
       page: newPage,
-    });
-  };
-
-  handleChangeRowsPerPage = (event) => {
-    this.setState({
-      rowsPerPage: event.target.value,
-      page: 0,
-
     });
   };
 
@@ -91,7 +98,7 @@ class TraineeList extends Component {
 
   render() {
     const {
-      EditOpen, isOpen, order, orderBy, page, rowsPerPage, editData,
+      EditOpen, isOpen, order, orderBy, page, rowsPerPage, editData, DeleteOpen, deleteData,
     } = this.state;
     const { classes } = this.props;
     return (
@@ -111,6 +118,12 @@ class TraineeList extends Component {
           open={EditOpen}
           onSubmit={this.handleEditButton}
           data={editData}
+        />
+        <DeleteDialog
+          data={deleteData}
+          onClose={this.handleDeleteButton}
+          onSubmit={this.handleDeleteButton}
+          open={DeleteOpen}
         />
         <Table
           id="id"
@@ -149,7 +162,6 @@ class TraineeList extends Component {
           count={100}
           page={page}
           rowsPerPage={rowsPerPage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
           onChangePage={this.handleChangePage}
         />
         {/* <div style={{ marginLeft: 15 }}>{this.renderTrainees()}</div> */}

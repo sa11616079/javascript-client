@@ -32,7 +32,6 @@ class EditDialog extends Component {
     this.state = {
       name: '',
       email: '',
-      open: false,
       error: {
         name: '',
         email: '',
@@ -105,10 +104,7 @@ class EditDialog extends Component {
     const {
       classes, open, onClose, onSubmit, data,
     } = this.props;
-    const {
-      name, error, hasError, email,
-    } = this.state;
-    console.log('Data... ', data);
+    const { hasError, error } = this.state;
     this.hasErrors();
     return (
       <Dialog
@@ -123,12 +119,11 @@ class EditDialog extends Component {
             Enter your trainee details
           </DialogContentText>
           <TextField
-            id="outlined-full-width"
             label="Name *"
             type="text"
             autoComplete="off"
             fullWidth
-            value={name}
+            defaultValue={data.name}
             error={error.name}
             helperText={this.getError('name')}
             onBlur={() => this.isTouched('name')}
@@ -146,13 +141,12 @@ class EditDialog extends Component {
             variant="outlined"
           />
           <TextField
-            id="outlined-full-width"
             label="Email Address"
             type="text"
             autoComplete="off"
             fullWidth
-            value={email}
-            error={error.email}
+            defaultValue={data.email}
+            error={error.name}
             helperText={this.getError('email')}
             onBlur={() => this.isTouched('email')}
             onChange={this.handleChange('email')}
@@ -177,9 +171,7 @@ class EditDialog extends Component {
             color="primary"
             variant="contained"
             onClick={() => {
-              onSubmit({
-                name, email,
-              });
+              onSubmit({ data });
             }}
             disabled={hasError}
           >
