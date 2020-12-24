@@ -26,6 +26,9 @@ const useStyles = (theme) => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.grey[100],
     },
+    '&:hover': {
+      backgroundColor: theme.palette.grey[300],
+    },
   },
 });
 
@@ -65,7 +68,7 @@ function TableComponent(props) {
         <TableBody>
           {
             data && data.length && data.map((item) => (
-              <TableRow hover className={classes.tableRow}>
+              <TableRow className={classes.tableRow}>
                 {
                   columns.length && columns.map(({ align, field, format }) => (
                     <TableCell onClick={(event) => onSelect(event, item.name)} align={align}>
