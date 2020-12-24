@@ -6,10 +6,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-const useStyles = () => ({
+const useStyles = (theme) => ({
   tableContainer: {
     marginLeft: 20,
     width: '97%',
@@ -20,10 +21,21 @@ const useStyles = () => ({
   tableHeader: {
     color: 'grey',
   },
+  tableRow: {
+    cursor: 'pointer',
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.grey[100],
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.grey[300],
+    },
+  },
 });
 
 function TableComponent(props) {
-  const { classes } = props;
+  const {
+    classes, order, orderBy, onSort, onSelect,
+  } = props;
   const {
     columns, data,
   } = props;
@@ -34,9 +46,20 @@ function TableComponent(props) {
         <TableHead>
           <TableRow>
             {
-              columns.length && columns.map(({ align, lable, field }) => (
-                <TableCell align={align} field={field} className={classes.tableHeader}>
-                  {lable}
+              columns.length && columns.map(({
+                align, field, lable,
+              }) => (
+                <TableCell
+                  align={align}
+                  className={classes.tableHeader}
+                >
+                  <TableSortLabel
+                    active={orderBy === field}
+                    direction={orderBy === field ? order : 'asc'}
+                    onClick={onSort(field)}
+                  >
+                    {lable}
+                  </TableSortLabel>
                 </TableCell>
               ))
             }
@@ -44,14 +67,15 @@ function TableComponent(props) {
         </TableHead>
         <TableBody>
           {
-            data && data.length && data.map(({ id, name, email }) => (
-              <TableRow key={id}>
-                <TableCell align="center">
-                  {name}
-                </TableCell>
-                <TableCell>
-                  {email}
-                </TableCell>
+            data && data.length && data.map((item) => (
+              <TableRow className={classes.tableRow}>
+                {
+                  columns.length && columns.map(({ align, field, format }) => (
+                    <TableCell onClick={(event) => onSelect(event, item.name)} align={align}>
+                      {format ? format(item[field]) : item[field]}
+                    </TableCell>
+                  ))
+                }
               </TableRow>
             ))
           }
@@ -64,5 +88,13 @@ TableComponent.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  order: PropTypes.string,
+  orderBy: PropTypes.string,
+  onSelect: PropTypes.func.isRequired,
+  onSort: PropTypes.func.isRequired,
+};
+TableComponent.defaultProps = {
+  order: '',
+  orderBy: '',
 };
 export default withStyles(useStyles)(TableComponent);
