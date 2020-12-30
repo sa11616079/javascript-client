@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Table } from '../Table/index';
+import { Table } from '../../components/Table/index';
 import { AddDialog, EditDialog, DeleteDialog } from './components/index';
 import traineeData from './data/trainee';
 import { getDateFormatted } from '../../libs/utils/getDateFormatted';
@@ -40,6 +40,10 @@ class TraineeList extends Component {
   handleClose = () => {
     this.setState({ isOpen: false });
   }
+
+  handleClick = (status, data) => {
+    this.setState({ isOpen: status }, () => { console.log(data); });
+  };
 
   handleEditButton = (data) => {
     this.setState({ EditOpen: false }, () => { console.log('Edited Item ', data.data); });
@@ -110,7 +114,7 @@ class TraineeList extends Component {
           <AddDialog
             onClose={this.handleClose}
             isOpen={isOpen}
-            onSubmit={this.handleUser}
+            onSubmit={(data) => this.handleClick(false, data)}
           />
         </div>
         <EditDialog
