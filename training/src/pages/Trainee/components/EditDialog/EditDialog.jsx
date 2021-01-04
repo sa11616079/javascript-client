@@ -4,8 +4,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import { withStyles } from '@material-ui/core/styles';
@@ -17,9 +15,6 @@ import * as yup from 'yup';
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),
   email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{5,10}[.]{1,1}[A-Za-z]{3,4}$/, 'Email Address must be valid field'),
-  password: yup.string().required('Password is required field').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,}$/,
-    'Must contain 8 characters at least one uppercase one lowercase and one number'),
-  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required field'),
 });
 
 const useStyles = () => ({
@@ -31,27 +26,20 @@ const useStyles = () => ({
   },
 });
 
-class AddDialog extends Component {
+class EditDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       email: '',
-      password: '',
-      confirmPassword: '',
-      isOpen: false,
       error: {
         name: '',
         email: '',
-        password: '',
-        confirmPassword: '',
       },
       hasError: false,
       touched: {
         name: false,
         email: false,
-        password: false,
-        confirmPassword: false,
       },
     };
   }
@@ -113,20 +101,19 @@ class AddDialog extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const { isOpen, onClose, onSubmit } = this.props;
     const {
-      name, error, hasError, email, password, confirmPassword,
-    } = this.state;
+      classes, open, onClose, onSubmit, data,
+    } = this.props;
+    const { hasError, error } = this.state;
     this.hasErrors();
     return (
       <Dialog
-        open={isOpen}
+        open={open}
         onClose={onClose}
         fullWidth
         maxWidth="md"
       >
-        <DialogTitle id="simple-dialog-title">Add Trainee</DialogTitle>
+        <DialogTitle id="simple-dialog-title">Edit Trainee</DialogTitle>
         <DialogContent className={classes.root}>
           <DialogContentText className={classes.Details}>
             Enter your trainee details
@@ -136,7 +123,7 @@ class AddDialog extends Component {
             type="text"
             autoComplete="off"
             fullWidth
-            value={name}
+            defaultValue={data.name}
             error={error.name}
             helperText={this.getError('name')}
             onBlur={() => this.isTouched('name')}
@@ -158,8 +145,8 @@ class AddDialog extends Component {
             type="text"
             autoComplete="off"
             fullWidth
-            value={email}
-            error={error.email}
+            defaultValue={data.email}
+            error={error.name}
             helperText={this.getError('email')}
             onBlur={() => this.isTouched('email')}
             onChange={this.handleChange('email')}
@@ -175,56 +162,6 @@ class AddDialog extends Component {
             }}
             variant="outlined"
           />
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                label="Password"
-                type="password"
-                autoComplete="off"
-                fullWidth
-                value={password}
-                error={error.password}
-                helperText={this.getError('password')}
-                onBlur={() => this.isTouched('password')}
-                onChange={this.handleChange('password')}
-                placeholder=""
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <VisibilityOffIcon className={classes.input} />
-                  ),
-                }}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Confirm Password"
-                autoComplete="off"
-                fullWidth
-                type="password"
-                value={confirmPassword}
-                error={error.confirmPassword}
-                helperText={this.getError('confirmPassword')}
-                onBlur={() => this.isTouched('confirmPassword')}
-                onChange={this.handleChange('confirmPassword')}
-                placeholder=""
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <VisibilityOffIcon className={classes.input} />
-                  ),
-                }}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
@@ -234,9 +171,7 @@ class AddDialog extends Component {
             color="primary"
             variant="contained"
             onClick={() => {
-              onSubmit({
-                name, email, password, confirmPassword,
-              });
+              onSubmit({ data });
             }}
             disabled={hasError}
           >
@@ -247,10 +182,11 @@ class AddDialog extends Component {
     );
   }
 }
-AddDialog.propTypes = {
+EditDialog.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  isOpen: PropTypes.bool.isRequired,
+  open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  data: PropTypes.objectOf(PropTypes.string).isRequired,
 };
-export default withStyles(useStyles)(AddDialog);
+export default withStyles(useStyles)(EditDialog);
