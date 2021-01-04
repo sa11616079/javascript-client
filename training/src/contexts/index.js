@@ -1,3 +1,3 @@
-import { MyContext, SnackBarProvider } from './snackBarProvider/index';
+import { MyContext, SnackBarProvider } from './snackBarProvider';
 
 export { MyContext, SnackBarProvider };

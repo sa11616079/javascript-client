@@ -11,7 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import * as yup from 'yup';
-import { MyContext } from '../../../../contexts/index';
+import { MyContext } from '../../../../contexts';
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),

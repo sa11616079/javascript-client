@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Table } from '../../components/Table/index';
+import { Table } from '../../components/Table';
 import { AddDialog, EditDialog, DeleteDialog } from './components/index';
 import traineeData from './data/trainee';
 import { getDateFormatted } from '../../libs/utils/getDateFormatted';
