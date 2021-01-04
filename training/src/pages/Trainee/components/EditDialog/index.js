@@ -1,3 +1,1 @@
-import EditDialog from './EditDialog';
-
-export { EditDialog };
+export { default as EditDialog } from './EditDialog';
