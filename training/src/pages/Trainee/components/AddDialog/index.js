@@ -1,3 +1,1 @@
-import AddDialog from './AddDialog';
-
-export { AddDialog };
+export { default as AddDialog } from './AddDialog';

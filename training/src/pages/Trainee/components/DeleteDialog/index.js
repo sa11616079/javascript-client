@@ -1,3 +1,1 @@
-import DeleteDialog from './DeleteDialog';
-
-export { DeleteDialog };
+export { default as DeleteDialog } from './DeleteDialog';
