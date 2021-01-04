@@ -11,6 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import * as yup from 'yup';
+import { MyContext } from '../../../../contexts';
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),
@@ -167,16 +168,21 @@ class EditDialog extends Component {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => {
-              onSubmit({ data });
-            }}
-            disabled={hasError}
-          >
-            Submit
-          </Button>
+          <MyContext.Consumer>
+            {({ openSnackBar }) => (
+              <Button
+                onClick={() => {
+                  onSubmit({ data });
+                  openSnackBar('This is a successfully updated message ! ', 'success');
+                }}
+                disabled={hasError}
+                color="primary"
+                variant="contained"
+              >
+                Submit
+              </Button>
+            )}
+          </MyContext.Consumer>
         </DialogActions>
       </Dialog>
     );

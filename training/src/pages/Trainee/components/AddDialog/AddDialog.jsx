@@ -13,6 +13,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import * as yup from 'yup';
+import { MyContext } from '../../../../contexts';
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),
@@ -113,8 +114,9 @@ class AddDialog extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const { isOpen, onClose, onSubmit } = this.props;
+    const {
+      classes, isOpen, onClose, onSubmit,
+    } = this.props;
     const {
       name, error, hasError, email, password, confirmPassword,
     } = this.state;
@@ -230,18 +232,23 @@ class AddDialog extends Component {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => {
-              onSubmit({
-                name, email, password, confirmPassword,
-              });
-            }}
-            disabled={hasError}
-          >
-            Submit
-          </Button>
+          <MyContext.Consumer>
+            {({ openSnackBar }) => (
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  onSubmit({
+                    name, email, password, confirmPassword,
+                  });
+                  openSnackBar('This is a successfully added trainee message ! ', 'success');
+                }}
+                disabled={hasError}
+              >
+                Submit
+              </Button>
+            )}
+          </MyContext.Consumer>
         </DialogActions>
       </Dialog>
     );
