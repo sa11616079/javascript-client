@@ -89,10 +89,11 @@ class Login extends Component {
           loading: true,
           hasError: true,
         });
-        await callApi(data, 'post', '/login');
+        const response = await callApi('user/login', 'post', data);
+        ls.set('token', response.data);
         this.setState({ loading: false });
-        const responseData = ls.get('token');
-        if (responseData.status === 200) {
+        const Token = ls.get('token');
+        if (Token !== 'undefined') {
           this.setState({
             redirect: true,
             hasError: false,

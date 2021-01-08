@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
@@ -6,10 +7,13 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+// import ls from 'local-storage';
 import { Table } from '../../components/Table';
 import { AddDialog, EditDialog, DeleteDialog } from './components/index';
 import traineeData from './data/trainee';
 import { getDateFormatted } from '../../libs/utils/getDateFormatted';
+import callApi from '../../libs/utils/api';
+import { MyContext } from '../../contexts/index';
 
 const useStyles = (theme) => ({
   traineeButton: {
@@ -31,9 +35,13 @@ class TraineeList extends Component {
       orderBy: '',
       order: '',
       page: 0,
+      dataObj: [],
       rowsPerPage: 10,
       editData: {},
       deleteData: {},
+      count: 0,
+      limit: 20,
+      skip: 0,
     };
   }
 
@@ -74,8 +82,39 @@ class TraineeList extends Component {
   }
 
   handleChangePage = (event, newPage) => {
+    this.componentDidMount(newPage);
     this.setState({
       page: newPage,
+    });
+  };
+
+  componentDidMount = () => {
+    const { limit, skip, dataObj } = this.state;
+    this.setState({ loading: true });
+    const value = this.context;
+    callApi(`trainee/getall?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
+      if (response.data === undefined) {
+        this.setState({
+          loading: false,
+          message: 'This is an error while displaying Trainee',
+        }, () => {
+          const { message } = this.state;
+          value.openSnackBar(message, 'error');
+        });
+      } else {
+        const { records, count } = response.data;
+        this.setState({ dataObj: records, loading: false, Count: count });
+        return response;
+      }
+      console.log('dataObj : ', dataObj);
+    });
+  }
+
+  handleChangeRowsPerPage = (event) => {
+    this.setState({
+      rowsPerPage: event.target.value,
+      page: 0,
+
     });
   };
 
@@ -102,7 +141,8 @@ class TraineeList extends Component {
 
   render() {
     const {
-      EditOpen, isOpen, order, orderBy, page, rowsPerPage, editData, DeleteOpen, deleteData,
+      EditOpen, isOpen, order, orderBy, page,
+      rowsPerPage, editData, DeleteOpen, deleteData, dataObj,
     } = this.state;
     const { classes } = this.props;
     return (
@@ -131,7 +171,7 @@ class TraineeList extends Component {
         />
         <Table
           id="id"
-          data={traineeData}
+          data={dataObj}
           columns={[
             {
               field: 'name',
@@ -167,12 +207,14 @@ class TraineeList extends Component {
           page={page}
           rowsPerPage={rowsPerPage}
           onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
         {/* <div style={{ marginLeft: 15 }}>{this.renderTrainees()}</div> */}
       </>
     );
   }
 }
+TraineeList.contextType = MyContext;
 TraineeList.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,

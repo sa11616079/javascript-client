@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import hoc from '../HOC/index';
 
 const useStyles = (theme) => ({
   tableContainer: {
@@ -44,7 +45,7 @@ class TableComponent extends Component {
   render() {
     const {
       id, columns, classes, order, orderBy, onSort, onSelect,
-      actions, data, count, rowsPerPage, page, onChangePage,
+      actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = this.props;
     return (
       <TableContainer component={Paper} className={classes.tableContainer}>
@@ -73,7 +74,7 @@ class TableComponent extends Component {
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? data.slice()
+              ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : data
             ).map((item) => (
               <TableRow className={classes.tableRow} key={item[id]}>
@@ -100,6 +101,7 @@ class TableComponent extends Component {
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
           />
         </Table>
       </TableContainer>
@@ -120,9 +122,10 @@ TableComponent.propTypes = {
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
   onChangePage: PropTypes.func.isRequired,
+  onChangeRowsPerPage: PropTypes.func.isRequired,
 };
 TableComponent.defaultProps = {
   order: 'asc',
   orderBy: '',
 };
-export default withStyles(useStyles)(TableComponent);
+export default withStyles(useStyles)(hoc(TableComponent));

@@ -12,14 +12,18 @@ import { withStyles } from '@material-ui/core/styles';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as yup from 'yup';
+import ls from 'local-storage';
 import { MyContext } from '../../../../contexts';
+import callApi from '../../../../libs/utils/api';
 
+// matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,}$/,
+//     'Must contain 8 characters at least one uppercase one lowercase and one number'),
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),
-  email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{5,10}[.]{1,1}[A-Za-z]{3,4}$/, 'Email Address must be valid field'),
-  password: yup.string().required('Password is required field').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,}$/,
-    'Must contain 8 characters at least one uppercase one lowercase and one number'),
+  email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{10,10}[.]{1,1}[A-Za-z]{4,4}$/, 'Email Address must be valid field'),
+  password: yup.string().min(3, 'Please enter min. 3 character').required('Password is required field'),
   confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required field'),
 });
 
@@ -41,6 +45,7 @@ class AddDialog extends Component {
       password: '',
       confirmPassword: '',
       isOpen: false,
+      loading: false,
       error: {
         name: '',
         email: '',
@@ -55,6 +60,33 @@ class AddDialog extends Component {
         confirmPassword: false,
       },
     };
+  }
+
+  onClickHandler = async (data, openSnackBar) => {
+    this.setState({
+      loading: true,
+      hasError: true,
+    });
+    await callApi('trainee/create', 'post', data);
+    this.setState({ loading: false });
+    const Token = ls.get('token');
+    if (Token !== 'undefined') {
+      this.setState({
+        hasError: false,
+        message: 'This is a successfully added trainee message',
+      }, () => {
+        const { message } = this.state;
+        openSnackBar(message, 'success');
+      });
+    } else {
+      this.setState({
+        hasError: false,
+        message: 'error in submitting',
+      }, () => {
+        const { message } = this.state;
+        openSnackBar(message, 'error');
+      });
+    }
   }
 
   handleBlur = (field) => {
@@ -113,12 +145,22 @@ class AddDialog extends Component {
     return error[field];
   }
 
+  formReset = () => {
+    this.setState({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      touched: {},
+    });
+  }
+
   render() {
     const {
-      classes, isOpen, onClose, onSubmit,
+      classes, isOpen, onClose,
     } = this.props;
     const {
-      name, error, hasError, email, password, confirmPassword,
+      name, error, hasError, email, password, confirmPassword, loading,
     } = this.state;
     this.hasErrors();
     return (
@@ -238,14 +280,20 @@ class AddDialog extends Component {
                 color="primary"
                 variant="contained"
                 onClick={() => {
-                  onSubmit({
+                  this.onClickHandler({
                     name, email, password, confirmPassword,
-                  });
-                  openSnackBar('This is a successfully added trainee message ! ', 'success');
+                  }, openSnackBar);
+                  this.formReset();
                 }}
-                disabled={hasError}
+                disabled={loading || hasError}
+                open={isOpen}
+                onClose={onClose}
               >
-                Submit
+                {loading && (
+                  <CircularProgress size={15} />
+                )}
+                {loading && <span>Submitting</span>}
+                {!loading && <span>Submit</span>}
               </Button>
             )}
           </MyContext.Consumer>
@@ -258,6 +306,5 @@ AddDialog.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 export default withStyles(useStyles)(AddDialog);
