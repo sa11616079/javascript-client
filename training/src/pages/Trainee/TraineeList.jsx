@@ -102,8 +102,8 @@ class TraineeList extends Component {
           value.openSnackBar(message, 'error');
         });
       } else {
-        const { records, count } = response.data;
-        this.setState({ dataObj: records, loading: false, Count: count });
+        const { records } = response.data;
+        this.setState({ dataObj: records, loading: false, Count: 100 });
         return response;
       }
       console.log('dataObj : ', dataObj);
@@ -142,7 +142,7 @@ class TraineeList extends Component {
   render() {
     const {
       EditOpen, isOpen, order, orderBy, page,
-      rowsPerPage, editData, DeleteOpen, deleteData, dataObj,
+      rowsPerPage, editData, DeleteOpen, deleteData, dataObj, Count,
     } = this.state;
     const { classes } = this.props;
     return (
@@ -203,7 +203,7 @@ class TraineeList extends Component {
           order={order}
           onSort={this.handleSort}
           onSelect={this.handleSelect}
-          count={100}
+          count={Count}
           page={page}
           rowsPerPage={rowsPerPage}
           onChangePage={this.handleChangePage}

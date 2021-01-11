@@ -6,13 +6,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
-import * as moment from 'moment';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { MyContext } from '../../../../contexts/index';
+import callApi from '../../../../libs/utils/api';
 
 class DeleteDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      message: '',
+      loading: false,
     };
   }
 
@@ -24,19 +27,25 @@ class DeleteDialog extends Component {
     this.setState({ open: false });
   };
 
-  handleSnackBarMessage = (data, openSnackBar) => {
-    const date = '2019-02-14T18:15:11.778Z';
-    const isAfter = (moment(data.createdAt).isAfter(date));
-    if (isAfter) {
+  onClickHandler = async (Data, openSnackBar) => {
+    this.setState({
+      loading: true,
+    });
+    const { onSubmit } = this.props;
+    const response = await callApi('trainee/delete', 'delete', { id: Data.id });
+    console.log('response.status : ', response);
+    this.setState({ loading: false });
+    if (response.status === 'ok') {
       this.setState({
-        message: 'Deleted Trainee Successfully ',
+        message: 'Deleted Successfully ',
       }, () => {
         const { message } = this.state;
+        onSubmit(Data);
         openSnackBar(message, 'success');
       });
     } else {
       this.setState({
-        message: 'Error While Deleting Trainee',
+        message: 'Error While Deleting',
       }, () => {
         const { message } = this.state;
         openSnackBar(message, 'error');
@@ -46,8 +55,9 @@ class DeleteDialog extends Component {
 
   render() {
     const {
-      open, onClose, onSubmit, data,
+      open, onClose, data,
     } = this.props;
+    const { loading } = this.state;
 
     return (
       <Dialog
@@ -69,11 +79,14 @@ class DeleteDialog extends Component {
                   color="primary"
                   variant="contained"
                   onClick={() => {
-                    onSubmit({ data });
-                    this.handleSnackBarMessage(data, openSnackBar);
+                    this.onClickHandler({ data }, openSnackBar);
                   }}
                 >
-                  Delete
+                  {loading && (
+                    <CircularProgress size={15} />
+                  )}
+                  {loading && <span>Deleting</span>}
+                  {!loading && <span>Delete</span>}
                 </Button>
               )}
             </MyContext.Consumer>
