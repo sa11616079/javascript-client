@@ -32,7 +32,8 @@ class DeleteDialog extends Component {
       loading: true,
     });
     const { onSubmit } = this.props;
-    const response = await callApi('trainee/delete', 'delete', { id: Data.id });
+    const { _id: id } = Data.data;
+    const response = await callApi(`trainee/delete?id=${id}`, 'delete', Data);
     console.log('response.status : ', response);
     this.setState({ loading: false });
     if (response.status === 'ok') {
