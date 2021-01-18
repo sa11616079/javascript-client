@@ -6,8 +6,6 @@ import ls from 'local-storage';
 const callApi = async (url, method, data) => {
   try {
     const baseUrl = `http://localhost:9000/api/${url}`;
-    console.log('dataaaaa : ', data);
-    console.log('baseUrl : ', baseUrl);
     const response = await axios({
       method,
       url: baseUrl,
