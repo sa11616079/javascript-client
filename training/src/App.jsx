@@ -17,40 +17,23 @@ import {
 import { AuthRoute, PrivateRoute } from './routes/index';
 import { SnackBarProvider } from './contexts/snackBarProvider';
 
+const url = ls.get('token') ? '/trainee' : '/login';
 const App = () => (
   <div>
     <SnackBarProvider>
-      {
-        ls.get('token') ? (
-          <Router>
-            <Switch>
-              <Route exact path="/">
-                <Redirect to="/trainee" />
-              </Route>
-              <AuthRoute path="/login" component={Login} />
-              <PrivateRoute path="/ChildrenDemo" component={ChildrenDemo} />
-              <PrivateRoute path="/TextFieldDemo" component={TextFieldDemo} />
-              <PrivateRoute path="/InputDemo" component={InputDemo} />
-              <PrivateRoute path="/trainee" component={Trainee} />
-              <PrivateRoute component={NoMatch} />
-            </Switch>
-          </Router>
-        ) : (
-          <Router>
-            <Switch>
-              <Route exact path="/">
-                <Redirect to="/login" />
-              </Route>
-              <AuthRoute path="/login" component={Login} />
-              <PrivateRoute path="/ChildrenDemo" component={ChildrenDemo} />
-              <PrivateRoute path="/TextFieldDemo" component={TextFieldDemo} />
-              <PrivateRoute path="/InputDemo" component={InputDemo} />
-              <PrivateRoute path="/trainee" component={Trainee} />
-              <PrivateRoute component={NoMatch} />
-            </Switch>
-          </Router>
-        )
-      }
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Redirect to={url} />
+          </Route>
+          <AuthRoute path="/login" component={Login} />
+          <PrivateRoute path="/ChildrenDemo" component={ChildrenDemo} />
+          <PrivateRoute path="/TextFieldDemo" component={TextFieldDemo} />
+          <PrivateRoute path="/InputDemo" component={InputDemo} />
+          <PrivateRoute path="/trainee" component={Trainee} />
+          <PrivateRoute component={NoMatch} />
+        </Switch>
+      </Router>
     </SnackBarProvider>
   </div>
 );

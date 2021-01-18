@@ -18,8 +18,6 @@ import ls from 'local-storage';
 import { MyContext } from '../../../../contexts';
 import callApi from '../../../../libs/utils/api';
 
-// matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,}$/,
-//     'Must contain 8 characters at least one uppercase one lowercase and one number'),
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),
   email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{10,10}[.]{1,1}[A-Za-z]{4,4}$/, 'Email Address must be valid field'),
