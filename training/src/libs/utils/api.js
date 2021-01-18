@@ -6,14 +6,10 @@ import ls from 'local-storage';
 const callApi = async (data, method, url) => {
   try {
     const baseUrl = `http://localhost:9000/api/user${url}`;
-    const { email, password } = data;
     const response = await axios({
       method,
       url: baseUrl,
-      data: {
-        email,
-        password,
-      },
+      data,
     });
     ls.set('token', response.data);
     const token = ls.get('token');
