@@ -3,17 +3,18 @@
 import axios from 'axios';
 import ls from 'local-storage';
 
-const callApi = async (data, method, url) => {
+const callApi = async (url, method, data) => {
   try {
     const baseUrl = `http://localhost:9000/api/user${url}`;
     const response = await axios({
       method,
       url: baseUrl,
       data,
+      headers: {
+        authorization: ls.get('token'),
+      },
     });
-    ls.set('token', response.data);
-    const token = ls.get('token');
-    console.log('Token:::::', token);
+    return response.data;
   } catch (error) {
     console.log('Inside catch', error);
     return { status: 'error', message: 'This is a error message' };
