@@ -44,12 +44,6 @@ class EditDialog extends Component {
     };
   }
 
-  // handleBlur = (field) => {
-  //   const { touched } = this.state;
-  //   touched[field] = true;
-  //   this.setState({ touched }, () => this.handleValidate());
-  // }
-
   handleNameChange = (event) => {
     const { touched } = this.setState;
     this.setState({
@@ -77,20 +71,6 @@ class EditDialog extends Component {
       });
     });
   };
-
-  // handleChange = (prop) => (event) => {
-  //   this.setState({ [prop]: event.target.value });
-  // };
-
-  // hasErrors = () => {
-  //   const { hasError } = this.state;
-  //   schema.isValid(this.state)
-  //     .then((valid) => {
-  //       if (!valid !== hasError) {
-  //         this.setState({ hasError: !valid });
-  //       }
-  //     });
-  // }
 
   isTouched = (field) => {
     const { touched } = this.state;
