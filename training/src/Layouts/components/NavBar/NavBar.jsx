@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Link } from 'react-router-dom';
+import ls from 'local-storage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +35,7 @@ function NavBar() {
           <Button component={Link} to="/TextFieldDemo" color="inherit">TEXTFIELD DEMO</Button>
           <Button component={Link} to="/InputDemo" color="inherit">INPUT DEMO</Button>
           <Button component={Link} to="/ChildrenDemo" color="inherit">CHILDREN DEMO</Button>
-          <Button color="inherit" style={{ marginLeft: 30 }}>LOGOUT</Button>
+          <Button href="/login" color="inherit" style={{ marginLeft: 30 }} onClick={() => { ls.clear('token'); }}>LOGOUT</Button>
         </Toolbar>
       </AppBar>
     </div>

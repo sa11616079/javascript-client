@@ -5,6 +5,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
+import ls from 'local-storage';
 import {
   TextFieldDemo,
   InputDemo,
@@ -16,13 +17,14 @@ import {
 import { AuthRoute, PrivateRoute } from './routes/index';
 import { SnackBarProvider } from './contexts/snackBarProvider';
 
+const url = ls.get('token') ? '/trainee' : '/login';
 const App = () => (
   <div>
     <SnackBarProvider>
       <Router>
         <Switch>
           <Route exact path="/">
-            <Redirect to="/trainee" />
+            <Redirect to={url} />
           </Route>
           <AuthRoute path="/login" component={Login} />
           <PrivateRoute path="/ChildrenDemo" component={ChildrenDemo} />

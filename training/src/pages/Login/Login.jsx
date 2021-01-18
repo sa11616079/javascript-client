@@ -10,8 +10,13 @@ import Container from '@material-ui/core/Container';
 import EmailIcon from '@material-ui/icons/Email';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { Box } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
+import ls from 'local-storage';
+import callApi from '../../libs/utils/api';
+import { MyContext } from '../../contexts/index';
 
 const schema = yup.object().shape({
   email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{5,10}[.]{1,1}[A-Za-z]{3,4}$/, 'Email Address must be valid field'),
@@ -46,6 +51,9 @@ class Login extends Component {
       email: '',
       password: '',
       isOpen: false,
+      loading: false,
+      redirect: false,
+      message: '',
       error: {
         email: '',
         password: '',
@@ -58,6 +66,14 @@ class Login extends Component {
     };
   }
 
+  renderRedirect = () => {
+    const { redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/trainee" />;
+    }
+    return null;
+  }
+
       handleBlur = (field) => {
         const { touched } = this.state;
         touched[field] = true;
@@ -67,6 +83,32 @@ class Login extends Component {
       handleChange = (prop) => (event) => {
         this.setState({ [prop]: event.target.value });
       };
+
+      onClickHandler = async (data, openSnackBar) => {
+        this.setState({
+          loading: true,
+          hasError: true,
+        });
+        await callApi(data, 'post', '/login');
+        this.setState({ loading: false });
+        const responseData = ls.get('token');
+        if (responseData.status === 200) {
+          this.setState({
+            redirect: true,
+            hasError: false,
+            message: 'Login successfully',
+          });
+          const { message } = this.state;
+          openSnackBar(message, 'success');
+        } else {
+          this.setState({
+            message: 'Email or Password is incorrect',
+          }, () => {
+            const { message } = this.state;
+            openSnackBar(message, 'error');
+          });
+        }
+      }
 
       hasErrors = () => {
         const { hasError } = this.state;
@@ -116,9 +158,8 @@ class Login extends Component {
 
       render() {
         const { classes } = this.props;
-        const { onSubmit } = this.props;
         const {
-          error, hasError, email, password,
+          error, hasError, email, password, loading,
         } = this.state;
         this.hasErrors();
         return (
@@ -180,21 +221,28 @@ class Login extends Component {
                     }}
                     variant="outlined"
                   />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={() => {
-                      onSubmit({
-                        email, password,
-                      });
-                    }}
-                    disabled={hasError}
-                  >
-                    Sign In
-                  </Button>
+                  <MyContext.Consumer>
+                    {({ openSnackBar }) => (
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={() => {
+                          this.onClickHandler({ email, password }, openSnackBar);
+                        }}
+                        disabled={loading || hasError}
+                      >
+                        {loading && (
+                          <CircularProgress />
+                        )}
+                        {loading && <span>Signing in</span>}
+                        {!loading && <span>Sign in</span>}
+                        {this.renderRedirect()}
+                      </Button>
+                    )}
+                  </MyContext.Consumer>
                 </form>
               </div>
             </Box>
@@ -204,6 +252,5 @@ class Login extends Component {
 }
 Login.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  onSubmit: PropTypes.func.isRequired,
 };
 export default withStyles(useStyles)(Login);
