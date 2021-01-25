@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -15,7 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import ls from 'local-storage';
-import callApi from '../../libs/utils/api';
+// import callApi from '../../libs/utils/api';
 import { MyContext } from '../../contexts/index';
 
 const schema = yup.object().shape({
@@ -74,6 +75,19 @@ class Login extends Component {
     return null;
   }
 
+  // handleSubmit = async () => {
+  //   const {
+  //     loginUser,
+  //     history,
+  //   } = this.props;
+
+  //   console.log('loginUser', loginUser);
+  //   console.log('history', history);
+
+  //   // await loginUser({ variables: { email, password } });
+  //   // history.push('/trainee');
+  // }
+
       handleBlur = (field) => {
         const { touched } = this.state;
         touched[field] = true;
@@ -89,7 +103,14 @@ class Login extends Component {
           loading: true,
           hasError: true,
         });
-        const response = await callApi('user/login', 'post', data);
+        const {
+          email,
+          password,
+        } = this.state;
+        const { loginUser } = this.props;
+        // const response = await callApi('user/login', 'post', data);
+        const response1 = await loginUser({ variables: { email, password } });
+        const response = JSON.parse(response1.data.loginUser);
         ls.set('token', response.data);
         this.setState({ loading: false });
         if (response.status === 200) {
@@ -252,5 +273,7 @@ class Login extends Component {
 }
 Login.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  loginUser: PropTypes.func.isRequired,
+  // history: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 export default withStyles(useStyles)(Login);
