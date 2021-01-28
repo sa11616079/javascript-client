@@ -4,9 +4,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import Button from '@material-ui/core/Button';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import { IconButton } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { withStyles } from '@material-ui/core/styles';
@@ -86,11 +86,9 @@ class TableComponent extends Component {
                   ))
                 }
                 {actions && actions.length && actions.map(({ icon, handler }) => (
-                  <TableRow>
-                    <Button onClick={() => handler(item)}>
-                      {icon}
-                    </Button>
-                  </TableRow>
+                  <IconButton onClick={() => handler(item)}>
+                    {icon}
+                  </IconButton>
                 ))}
               </TableRow>
             ))}

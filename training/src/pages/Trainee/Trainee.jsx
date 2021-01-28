@@ -1,14 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ApolloProvider } from '@apollo/react-hoc';
 import { Switch, Route } from 'react-router-dom';
 import TraineeList from './TraineeList';
 import TraineeDetails from './TraineeDetail';
+import client from '../../libs/apollo-client';
 
 const Trainee = ({ match }) => (
-  <Switch>
-    <Route exact path={match.path} component={TraineeList} />
-    <Route path={`${match.path}/:id`} component={TraineeDetails} />
-  </Switch>
+  <ApolloProvider client={client}>
+    <Switch>
+      <Route exact path={match.path} component={TraineeList} />
+      <Route path={`${match.path}/:id`} component={TraineeDetails} />
+    </Switch>
+  </ApolloProvider>
 );
 const propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,

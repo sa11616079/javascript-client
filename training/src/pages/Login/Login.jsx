@@ -75,19 +75,6 @@ class Login extends Component {
     return null;
   }
 
-  // handleSubmit = async () => {
-  //   const {
-  //     loginUser,
-  //     history,
-  //   } = this.props;
-
-  //   console.log('loginUser', loginUser);
-  //   console.log('history', history);
-
-  //   // await loginUser({ variables: { email, password } });
-  //   // history.push('/trainee');
-  // }
-
       handleBlur = (field) => {
         const { touched } = this.state;
         touched[field] = true;
@@ -111,6 +98,7 @@ class Login extends Component {
         // const response = await callApi('user/login', 'post', data);
         const response1 = await loginUser({ variables: { email, password } });
         const response = JSON.parse(response1.data.loginUser);
+        console.log('hello login : ', response1);
         ls.set('token', response.data);
         this.setState({ loading: false });
         if (response.status === 200) {
@@ -199,7 +187,6 @@ class Login extends Component {
                     id="outlined-full-width"
                     label="Email Address"
                     type="text"
-                    autoComplete="off"
                     fullWidth
                     className={classes.TextField}
                     value={email}
@@ -223,7 +210,6 @@ class Login extends Component {
                     id="outlined-full-width"
                     label="Password"
                     type="password"
-                    autoComplete="off"
                     fullWidth
                     value={password}
                     error={error.password}

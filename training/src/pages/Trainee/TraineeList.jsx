@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
@@ -7,12 +8,14 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import ls from 'local-storage';
+import { graphql } from '@apollo/react-hoc';
+import Compose from 'lodash.flowright';
+import { GET_TRAINEE } from './query';
 import { Table } from '../../components/Table';
 import { AddDialog, EditDialog, DeleteDialog } from './components/index';
 import traineeData from './data/trainee';
 import { getDateFormatted } from '../../libs/utils/getDateFormatted';
-import callApi from '../../libs/utils/api';
+// import callApi from '../../libs/utils/api';
 import { MyContext } from '../../contexts/index';
 
 const useStyles = (theme) => ({
@@ -36,12 +39,10 @@ class TraineeList extends Component {
       order: '',
       page: 0,
       dataObj: [],
-      rowsPerPage: 10,
+      rowsPerPage: 5,
       editData: {},
       deleteData: {},
       count: 0,
-      limit: 20,
-      skip: 0,
     };
   }
 
@@ -81,68 +82,19 @@ class TraineeList extends Component {
     });
   }
 
-  handleChangePage = (event, newPage) => {
-    this.componentDidMount(newPage);
-    this.setState({
+  handlePageChange = (refetch) => async (event, newPage) => {
+    const { rowsPerPage } = this.state;
+    await this.setState({
       page: newPage,
-    });
-  };
-
-  componentDidMount = () => {
-    const { limit, skip, dataObj } = this.state;
-    this.setState({ loading: true });
-    const value = this.context;
-    console.log('recordd : ', value);
-    callApi(`trainee/getall?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
-      console.log('recordd1243 : ', response);
-      if (response.data === undefined) {
-        this.setState({
-          loading: false,
-          message: 'This is an error while displaying Trainee',
-        }, () => {
-          const { message } = this.state;
-          value.openSnackBar(message, 'error');
-        });
-      } else {
-        const { records } = response.data;
-        console.log('recordd : ', records);
-        this.setState({ dataObj: records, loading: false, Count: 100 });
-        console.log('recordd res : ', response);
-        return response;
-      }
-      console.log('dataObj : ', dataObj);
+    }, () => {
+      refetch({ skip: newPage * (rowsPerPage), limit: rowsPerPage });
     });
   }
-
-  // componentDidMount = () => {
-  //   this.setState({ isLoaded: true });
-  //   const { limit, skip } = this.state;
-  //   const value = this.context;
-  //   console.log('val :', value);
-  //   // eslint-disable-next-line consistent-return
-  //   callApi(`trainee/getall?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
-  //     console.log('response compo', response);
-  //     console.log('res data', response.data);
-  //     if (response.data === undefined) {
-  //       this.setState({
-  //         isLoaded: false,
-  //       }, () => {
-  //       });
-  //     } else {
-  //       console.log('res inside traineelist :', response);
-  //       const record = response.data;
-  //       console.log('records aa :', record);
-  //       this.setState({ dataObj: record, isLoaded: false, count: 100 });
-  //       return response;
-  //     }
-  //   });
-  // }
 
   handleChangeRowsPerPage = (event) => {
     this.setState({
       rowsPerPage: event.target.value,
       page: 0,
-
     });
   };
 
@@ -170,9 +122,16 @@ class TraineeList extends Component {
   render() {
     const {
       EditOpen, isOpen, order, orderBy, page,
-      rowsPerPage, editData, DeleteOpen, deleteData, dataObj, Count,
+      rowsPerPage, editData, DeleteOpen, deleteData,
     } = this.state;
     const { classes } = this.props;
+    const {
+      data: {
+        getAllTrainees: { records = [], TotalCount = 0 } = {},
+        refetch,
+        loading,
+      },
+    } = this.props;
     return (
       <>
         <div className={classes.dialog}>
@@ -198,8 +157,9 @@ class TraineeList extends Component {
           open={DeleteOpen}
         />
         <Table
+          loader={loading}
           id="id"
-          data={dataObj}
+          data={records}
           columns={[
             {
               field: 'name',
@@ -231,10 +191,10 @@ class TraineeList extends Component {
           order={order}
           onSort={this.handleSort}
           onSelect={this.handleSelect}
-          count={Count}
+          count={TotalCount}
           page={page}
           rowsPerPage={rowsPerPage}
-          onChangePage={this.handleChangePage}
+          onChangePage={this.handlePageChange(refetch)}
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
         {/* <div style={{ marginLeft: 15 }}>{this.renderTrainees()}</div> */}
@@ -246,5 +206,12 @@ TraineeList.contextType = MyContext;
 TraineeList.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  data: PropTypes.objectOf.isRequired,
 };
-export default withStyles(useStyles)(TraineeList);
+export default Compose(
+  withStyles(useStyles),
+  graphql(GET_TRAINEE, {
+    options: { variables: { skip: 0, limit: 11 } },
+  }),
+)(TraineeList);
+// export default withStyles(useStyles)(TraineeList);
