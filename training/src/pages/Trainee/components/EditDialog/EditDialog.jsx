@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,8 +14,6 @@ import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as yup from 'yup';
-import { MyContext } from '../../../../contexts';
-import callApi from '../../../../libs/utils/api';
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),
@@ -28,6 +27,13 @@ const useStyles = () => ({
   input: {
     paddingRight: 5,
   },
+  button_color: {
+    backgroundColor: 'blue',
+    color: 'black',
+  },
+  button_error: {
+    backgroundColor: '#bbb9b9',
+  },
 });
 
 class EditDialog extends Component {
@@ -37,55 +43,32 @@ class EditDialog extends Component {
       name: '',
       email: '',
       loading: false,
-      touched: {
-        name: false,
-        email: false,
+      error: {
+        name: '',
+        email: '',
       },
     };
   }
 
-  handleNameChange = (event) => {
-    const { touched } = this.setState;
+  handleSet = () => {
+    const { data } = this.props;
     this.setState({
-      name: event.target.value,
-    }, () => {
-      this.setState({
-        touched: {
-          ...touched,
-          name: true,
-        },
-      });
+      name: data.name,
+      email: data.email,
     });
   };
 
-  handleEmailChange = (event) => {
-    const { touched } = this.state;
+  handleOnChange = (prop) => (event) => {
     this.setState({
-      email: event.target.value,
-    }, () => {
-      this.setState({
-        touched: {
-          ...touched,
-          email: true,
-        },
-      });
+      [prop]: event.target.value,
     });
   };
-
-  isTouched = (field) => {
-    const { touched } = this.state;
-    this.setState({
-      touched: {
-        ...touched,
-        [field]: true,
-      },
-    });
-  }
 
   getError = (field) => {
-    const { error, touched } = this.state;
-    if (touched[field]) {
-      schema.validateAt(field, this.state).then(() => {
+    const { error } = this.state;
+    schema
+      .validateAt(field, this.state)
+      .then(() => {
         if (error[field] !== '') {
           this.setState({
             error: {
@@ -94,7 +77,8 @@ class EditDialog extends Component {
             },
           });
         }
-      }).catch((err) => {
+      })
+      .catch((err) => {
         if (err.message !== error[field]) {
           this.setState({
             error: {
@@ -104,51 +88,25 @@ class EditDialog extends Component {
           });
         }
       });
-    }
     return error[field];
-  }
+  };
 
-  onClickHandler = async (Data, openSnackBar) => {
-    const { onSubmit } = this.props;
-    this.setState({
-      loading: true,
-    });
-    const response = await callApi('trainee/update', 'put', { id: Data.id, ...Data });
-    this.setState({ loading: false });
-    if (response.status === 'ok') {
-      this.setState({
-        message: 'Trainee Updated Successfully',
-      }, () => {
-        const { message } = this.state;
-        onSubmit(Data);
-        openSnackBar(message, 'success');
-      });
-    } else {
-      this.setState({
-        message: 'Error while submitting',
-      }, () => {
-        const { message } = this.state;
-        openSnackBar(message, 'error');
-      });
-    }
-  }
-
-  formReset = () => {
-    this.setState({
-      name: '',
-      email: '',
-      touched: {},
-    });
-  }
+  hasErrors = () => {
+    const { error } = this.state;
+    let iserror = Object.values(error);
+    iserror = iserror.filter((errorMessage) => errorMessage !== '');
+    return !!iserror.length;
+  };
 
   render() {
     const {
-      open, onClose, data, classes,
+      open, onClose, data, classes, loading: { loading }, onSubmit,
     } = this.props;
     const {
-      name, email, loading,
+      name, email,
     } = this.state;
-    const { originalId: id } = data;
+    const { originalId } = data;
+    console.log('iidd : ', originalId);
     return (
       <Dialog
         open={open}
@@ -167,8 +125,8 @@ class EditDialog extends Component {
             autoFocus
             fullWidth
             defaultValue={data.name}
-            onBlur={() => this.isTouched('name')}
-            onChange={this.handleNameChange}
+            helperText={this.getError('name')}
+            onChange={this.handleOnChange('name')}
             placeholder=""
             margin="normal"
             InputLabelProps={{
@@ -187,8 +145,8 @@ class EditDialog extends Component {
             autoComplete="off"
             fullWidth
             defaultValue={data.email}
-            onBlur={() => this.isTouched('email')}
-            onChange={this.handleEmailChange}
+            helperText={this.getError('email')}
+            onChange={this.handleOnChange('email')}
             placeholder=""
             margin="normal"
             InputLabelProps={{
@@ -206,25 +164,19 @@ class EditDialog extends Component {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <MyContext.Consumer>
-            {({ openSnackBar }) => (
-              <Button
-                onClick={() => {
-                  this.onClickHandler({ name, email, id }, openSnackBar);
-                  this.formReset();
-                }}
-                disabled={loading}
-                color="primary"
-                variant="contained"
-              >
-                {loading && (
-                  <CircularProgress size={15} />
-                )}
-                {loading && <span>Submitting</span>}
-                {!loading && <span>Submit</span>}
-              </Button>
+          <Button
+            onClick={() => {
+              onSubmit({ name, email, originalId });
+            }}
+            color="primary"
+            variant="contained"
+          >
+            {loading && (
+              <CircularProgress size={15} />
             )}
-          </MyContext.Consumer>
+            {loading && <span>Submitting</span>}
+            {!loading && <span>Submit</span>}
+          </Button>
         </DialogActions>
       </Dialog>
     );
