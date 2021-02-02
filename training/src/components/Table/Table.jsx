@@ -47,6 +47,7 @@ class TableComponent extends Component {
       id, columns, classes, order, orderBy, onSort, onSelect,
       actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = this.props;
+    console.log('Data', data);
     return (
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.table}>
@@ -94,7 +95,7 @@ class TableComponent extends Component {
             ))}
           </TableBody>
           <TablePagination
-            rowsPerPageOptions={0}
+            rowsPerPageOptions={[]}
             count={count}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -110,17 +111,27 @@ TableComponent.propTypes = {
   id: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  actions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  actions: PropTypes.arrayOf(PropTypes.object),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   order: PropTypes.string,
   orderBy: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
-  onSort: PropTypes.func.isRequired,
-  count: PropTypes.number.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
+  onSort: PropTypes.func,
+  count: PropTypes.number,
+  page: PropTypes.number,
+  rowsPerPage: PropTypes.number,
+  onChangePage: PropTypes.func,
   onChangeRowsPerPage: PropTypes.func.isRequired,
+};
+TableComponent.defaultProps = {
+  order: '',
+  orderBy: '',
+  onSort: () => {},
+  onChangePage: () => {},
+  rowsPerPage: 10,
+  count: 0,
+  page: 1,
+  actions: [],
 };
 TableComponent.defaultProps = {
   order: 'asc',

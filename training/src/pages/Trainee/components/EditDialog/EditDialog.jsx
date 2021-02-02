@@ -106,7 +106,6 @@ class EditDialog extends Component {
       name, email,
     } = this.state;
     const { originalId } = data;
-    console.log('iidd : ', originalId);
     return (
       <Dialog
         open={open}

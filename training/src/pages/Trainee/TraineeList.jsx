@@ -40,7 +40,7 @@ class TraineeList extends Component {
       order: '',
       page: 0,
       dataObj: [],
-      rowsPerPage: 5,
+      rowsPerPage: 10,
       editData: {},
       deleteData: {},
       count: 0,
@@ -83,13 +83,14 @@ class TraineeList extends Component {
     });
   }
 
-  onAddTrainee = async (data, openSnackBar, createTrainee) => {
+  onAddTrainee = async (data, openSnackBar, createTrainee, refetch) => {
     try {
       const { name, email, password } = data;
       await createTrainee({ variables: { name, email, password } });
       this.setState({
         open: false,
       }, () => {
+        refetch();
         openSnackBar('Trainee Created Successfully', 'success');
       });
     } catch {
@@ -101,7 +102,7 @@ class TraineeList extends Component {
     }
   }
 
-  onEditTrainee = async (data, openSnackBar, updateTrainee) => {
+  onEditTrainee = async (data, openSnackBar, updateTrainee, refetch) => {
     try {
       const { name, email, originalId } = data;
       console.log('data is :', data);
@@ -110,6 +111,7 @@ class TraineeList extends Component {
       this.setState({
         EditOpen: false,
       }, () => {
+        refetch();
         openSnackBar('Trainee Updated Successfully', 'success');
       });
     } catch {
@@ -121,32 +123,17 @@ class TraineeList extends Component {
     }
   };
 
-  onDeleteTrainee = async (data, deleteTrainee, openSnackBar) => {
+  onDeleteTrainee = async (data, deleteTrainee, openSnackBar, refetch) => {
     const { originalId } = data;
-    const { rowsPerPage, page } = this.state;
-    const {
-      data: {
-        getTrainee: { count = 0 } = {},
-        refetch,
-      },
-    } = this.props;
     const response = await deleteTrainee({ variables: { originalId } });
     if (response) {
+      refetch();
       this.setState({
         DelOpen: false,
       }, () => {
         openSnackBar('Trainee Deleted Successfully', 'success');
       });
-      if (count - page * rowsPerPage === 1 && page > 0) {
-        refetch({ skip: (page - 1) * rowsPerPage, limit: rowsPerPage });
-      }
     }
-  }
-
-  handlePageChange = (refetch) => async (event, newPage) => {
-    const { rowsPerPage } = this.state;
-    this.setState({ page: newPage });
-    await refetch({ skip: newPage * rowsPerPage, limit: rowsPerPage });
   }
 
   handleChangeRowsPerPage = (event) => {
@@ -154,6 +141,12 @@ class TraineeList extends Component {
       rowsPerPage: event.target.value,
       page: 0,
     });
+  };
+
+  handlePageChange = (refetch) => async (event, newPage) => {
+    const { data: { variables } } = this.props;
+    await this.setState({ page: newPage });
+    refetch({ variables });
   };
 
   renderTrainee = (trainee) => {
@@ -185,12 +178,12 @@ class TraineeList extends Component {
     const { classes } = this.props;
     const {
       data: {
-        getAllTrainees: { records = [], TotalCount = 0 } = {},
+        getAllTrainees: { records = [], TraineeCount = 0 } = {},
         refetch,
         loading,
       },
     } = this.props;
-    const variables = { skip: page * rowsPerPage, limit: rowsPerPage };
+    const variables = { skip: (page * rowsPerPage), limit: rowsPerPage };
     return (
       <>
         <Mutation
@@ -219,7 +212,7 @@ class TraineeList extends Component {
                               onClose={this.handleClose}
                               isOpen={isOpen}
                               onSubmit={(data) => this.onAddTrainee(data, openSnackBar,
-                                createTrainee)}
+                                createTrainee, refetch)}
                               loading={createrLoader}
                             />
                           </div>
@@ -227,7 +220,8 @@ class TraineeList extends Component {
                             onClose={this.handleEditButton}
                             open={EditOpen}
                             onSubmit={
-                              (data) => this.onEditTrainee(data, openSnackBar, updateTrainee)
+                              (data) => this.onEditTrainee(data, openSnackBar,
+                                updateTrainee, refetch)
                             }
                             data={editData}
                             loading={updateLoader}
@@ -236,7 +230,8 @@ class TraineeList extends Component {
                             data={deleteData}
                             onClose={this.handleDeleteButton}
                             onSubmit={
-                              (data) => this.onDeleteTrainee(data, deleteTrainee, openSnackBar)
+                              (data) => this.onDeleteTrainee(data, deleteTrainee,
+                                openSnackBar, refetch)
                             }
                             open={DeleteOpen}
                             loading={delLoader}
@@ -276,10 +271,10 @@ class TraineeList extends Component {
                             order={order}
                             onSort={this.handleSort}
                             onSelect={this.handleSelect}
-                            count={TotalCount}
+                            count={Number(TraineeCount)}
                             page={page}
                             rowsPerPage={rowsPerPage}
-                            onChangePage={this.handlePageChange(refetch, TotalCount)}
+                            onChangePage={this.handlePageChange(refetch)}
                             onChangeRowsPerPage={this.handleChangeRowsPerPage}
                           />
                           {/* <div style={{ marginLeft: 15 }}>{this.renderTrainees()}</div> */}
@@ -305,7 +300,7 @@ TraineeList.propTypes = {
 export default Compose(
   withStyles(useStyles),
   graphql(GET_TRAINEE, {
-    options: { variables: { skip: 0, limit: 11 } },
+    options: { variables: { skip: 0, limit: 20 } },
   }),
 )(TraineeList);
 // export default withStyles(useStyles)(TraineeList);

@@ -10,6 +10,7 @@ query GetTrainee($skip: Int, $limit: Int) {
       originalId,
     },
     TotalCount,
+    TraineeCount,
   }
   }`;
 
