@@ -47,7 +47,6 @@ class TableComponent extends Component {
       id, columns, classes, order, orderBy, onSort, onSelect,
       actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = this.props;
-    console.log('Data', data);
     return (
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.table}>
