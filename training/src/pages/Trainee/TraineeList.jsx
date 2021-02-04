@@ -92,7 +92,9 @@ class TraineeList extends Component {
     const { limit, skip, dataObj } = this.state;
     this.setState({ loading: true });
     const value = this.context;
+    console.log('recordd : ', value);
     callApi(`trainee/getall?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
+      console.log('recordd1243 : ', response);
       if (response.data === undefined) {
         this.setState({
           loading: false,
@@ -103,12 +105,38 @@ class TraineeList extends Component {
         });
       } else {
         const { records } = response.data;
+        console.log('recordd : ', records);
         this.setState({ dataObj: records, loading: false, Count: 100 });
+        console.log('recordd res : ', response);
         return response;
       }
       console.log('dataObj : ', dataObj);
     });
   }
+
+  // componentDidMount = () => {
+  //   this.setState({ isLoaded: true });
+  //   const { limit, skip } = this.state;
+  //   const value = this.context;
+  //   console.log('val :', value);
+  //   // eslint-disable-next-line consistent-return
+  //   callApi(`trainee/getall?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
+  //     console.log('response compo', response);
+  //     console.log('res data', response.data);
+  //     if (response.data === undefined) {
+  //       this.setState({
+  //         isLoaded: false,
+  //       }, () => {
+  //       });
+  //     } else {
+  //       console.log('res inside traineelist :', response);
+  //       const record = response.data;
+  //       console.log('records aa :', record);
+  //       this.setState({ dataObj: record, isLoaded: false, count: 100 });
+  //       return response;
+  //     }
+  //   });
+  // }
 
   handleChangeRowsPerPage = (event) => {
     this.setState({
