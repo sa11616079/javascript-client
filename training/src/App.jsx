@@ -8,7 +8,6 @@ import {
   Switch,
 } from 'react-router-dom';
 import ls from 'local-storage';
-import Apolloclient from './libs/apollo-client';
 import {
   TextFieldDemo,
   InputDemo,
@@ -19,12 +18,13 @@ import {
 } from './pages/index';
 import { AuthRoute, PrivateRoute } from './routes/index';
 import { SnackBarProvider } from './contexts/snackBarProvider';
+import client from './libs/apollo-client';
 
 const url = ls.get('token') ? '/trainee' : '/login';
 const App = () => (
   <div>
     <SnackBarProvider>
-      <ApolloProvider client={Apolloclient}>
+      <ApolloProvider client={client}>
         <CssBaseline />
         <Router>
           <Switch>
