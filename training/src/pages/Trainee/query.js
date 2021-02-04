@@ -7,8 +7,10 @@ query GetTrainee($skip: Int, $limit: Int) {
       name,
       email,
       createdAt,
+      originalId,
     },
     TotalCount,
+    TraineeCount,
   }
   }`;
 

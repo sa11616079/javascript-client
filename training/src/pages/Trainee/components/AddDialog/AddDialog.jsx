@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -14,13 +15,10 @@ import PropTypes from 'prop-types';
 import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as yup from 'yup';
-import ls from 'local-storage';
-import { MyContext } from '../../../../contexts';
-import callApi from '../../../../libs/utils/api';
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required field'),
-  email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{10,10}[.]{1,1}[A-Za-z]{4,4}$/, 'Email Address must be valid field'),
+  email: yup.string().required('Email Address is required field').matches(/^[A-Za-z.0-9]{3,}@[A-Za-z]{5,10}[.]{1,1}[A-Za-z]{3,4}$/, 'Email Address must be valid field'),
   password: yup.string().min(3, 'Please enter min. 3 character').required('Password is required field'),
   confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required field'),
 });
@@ -58,33 +56,6 @@ class AddDialog extends Component {
         confirmPassword: false,
       },
     };
-  }
-
-  onClickHandler = async (data, openSnackBar) => {
-    this.setState({
-      loading: true,
-      hasError: true,
-    });
-    await callApi('trainee/create', 'post', data);
-    this.setState({ loading: false });
-    const Token = ls.get('token');
-    if (Token !== 'undefined') {
-      this.setState({
-        hasError: false,
-        message: 'This is a successfully added trainee message',
-      }, () => {
-        const { message } = this.state;
-        openSnackBar(message, 'success');
-      });
-    } else {
-      this.setState({
-        hasError: false,
-        message: 'error in submitting',
-      }, () => {
-        const { message } = this.state;
-        openSnackBar(message, 'error');
-      });
-    }
   }
 
   handleBlur = (field) => {
@@ -155,10 +126,10 @@ class AddDialog extends Component {
 
   render() {
     const {
-      classes, isOpen, onClose,
+      classes, isOpen, onClose, loading: { loading }, onSubmit,
     } = this.props;
     const {
-      name, error, hasError, email, password, confirmPassword, loading,
+      name, error, hasError, email, password, confirmPassword,
     } = this.state;
     this.hasErrors();
     return (
@@ -272,29 +243,25 @@ class AddDialog extends Component {
           <Button onClick={onClose} color="primary">
             Cancel
           </Button>
-          <MyContext.Consumer>
-            {({ openSnackBar }) => (
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  this.onClickHandler({
-                    name, email, password, confirmPassword,
-                  }, openSnackBar);
-                  this.formReset();
-                }}
-                disabled={loading || hasError}
-                open={isOpen}
-                onClose={onClose}
-              >
-                {loading && (
-                  <CircularProgress size={15} />
-                )}
-                {loading && <span>Submitting</span>}
-                {!loading && <span>Submit</span>}
-              </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              onSubmit({
+                name, email, password, confirmPassword,
+              });
+              this.formReset();
+            }}
+            disabled={loading || hasError}
+            open={isOpen}
+            onClose={onClose}
+          >
+            {loading && (
+              <CircularProgress size={15} />
             )}
-          </MyContext.Consumer>
+            {loading && <span>Submitting</span>}
+            {!loading && <span>Submit</span>}
+          </Button>
         </DialogActions>
       </Dialog>
     );

@@ -26,7 +26,6 @@ class Slider extends Component {
         }
         this.setState({ current });
       }, duration);
-      console.log("hello", `${PUBLIC_IMAGE_FOLDER}${banner[current]}`)
     }
 
     componentWillUnmount = () => {
@@ -51,7 +50,8 @@ class Slider extends Component {
       return (
         <>
           <div align="center">
-            <Img src={`${PUBLIC_IMAGE_FOLDER}${banner[current]}`} alt={altText} height={height} duration={duration} />
+            <Img src={`${PUBLIC_IMAGE_FOLDER}${banner[current]}`}
+            alt={altText} height={height} duration={duration} />
           </div>
         </>
       );
