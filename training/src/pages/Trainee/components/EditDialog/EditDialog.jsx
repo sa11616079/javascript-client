@@ -27,13 +27,6 @@ const useStyles = () => ({
   input: {
     paddingRight: 5,
   },
-  button_color: {
-    backgroundColor: 'blue',
-    color: 'black',
-  },
-  button_error: {
-    backgroundColor: '#bbb9b9',
-  },
 });
 
 class EditDialog extends Component {
@@ -165,7 +158,7 @@ class EditDialog extends Component {
           </Button>
           <Button
             onClick={() => {
-              onSubmit({ name, email, originalId });
+              onSubmit({ name: name || data.name, email: email || data.email, originalId });
             }}
             color="primary"
             variant="contained"

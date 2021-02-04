@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 /* eslint-disable consistent-return */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
@@ -18,6 +19,7 @@ import traineeData from './data/trainee';
 import { getDateFormatted } from '../../libs/utils/getDateFormatted';
 import { DELETE_TRAINEE, UPDATE_TRAINEE, CREATE_TRAINEE } from './mutation';
 import { MyContext } from '../../contexts/index';
+import { DELETED_TRAINEE_SUB, UPDATED_TRAINEE_SUB } from './subscription';
 
 const useStyles = (theme) => ({
   traineeButton: {
@@ -40,7 +42,7 @@ class TraineeList extends Component {
       order: '',
       page: 0,
       dataObj: [],
-      rowsPerPage: 10,
+      rowsPerPage: 5,
       editData: {},
       deleteData: {},
       count: 0,
@@ -105,9 +107,7 @@ class TraineeList extends Component {
   onEditTrainee = async (data, openSnackBar, updateTrainee, refetch) => {
     try {
       const { name, email, originalId } = data;
-      console.log('data is :', data);
-      const r = await updateTrainee({ variables: { name, email, originalId } });
-      console.log('r : ', r);
+      await updateTrainee({ variables: { name, email, originalId } });
       this.setState({
         EditOpen: false,
       }, () => {
@@ -148,6 +148,50 @@ class TraineeList extends Component {
     await this.setState({ page: newPage });
     refetch({ variables });
   };
+
+  componentDidMount = () => {
+    const { data: { subscribeToMore } } = this.props;
+    subscribeToMore({
+      document: UPDATED_TRAINEE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) return prev;
+        const { getAllTrainees: { records } } = prev;
+        const { data: { traineeUpdated } } = subscriptionData;
+        const updatedRecords = [...records].map((record) => {
+          if (record.originalId === traineeUpdated.data.originalId) {
+            return {
+              ...record,
+              ...traineeUpdated.data,
+            };
+          }
+          return record;
+        });
+        return {
+          getAllTrainees: {
+            ...prev.getAllTrainees,
+            ...prev.getAllTrainees.TraineeCount,
+            records: updatedRecords,
+          },
+        };
+      },
+    });
+    subscribeToMore({
+      document: DELETED_TRAINEE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) return prev;
+        const { getAllTrainees: { records } } = prev;
+        const { data: { traineeDeleted } } = subscriptionData;
+        const updatedRecords = [...records].filter((record) => record.originalId !== traineeDeleted.data.originalId);
+        return {
+          getAllTrainees: {
+            ...prev.getAllTrainees,
+            ...prev.getAllTrainees.TraineeCount - 1,
+            records: updatedRecords,
+          },
+        };
+      },
+    });
+  }
 
   renderTrainee = (trainee) => {
     const { match } = this.props;
@@ -249,6 +293,10 @@ class TraineeList extends Component {
                                 field: 'email',
                                 lable: 'Email Address',
                                 format: (value) => value && value.toUpperCase(),
+                              },
+                              {
+                                field: 'role',
+                                lable: 'Role',
                               },
                               {
                                 field: 'createdAt',

@@ -8,13 +8,26 @@ mutation CreateTrainee($name: String, $email: String, $password: String) {
 
 const UPDATE_TRAINEE = gql`
 mutation UpdateTrainee($originalId: String $name: String, $email: String) {
-  updateTrainee(payload: { originalId: $originalId,name: $name, email: $email})
+  updateTrainee(payload: { originalId: $originalId,name: $name, email: $email}){
+    message
+    data{
+      originalId,
+      name,
+      email,
+    }
+  }
 }
 `;
 
 const DELETE_TRAINEE = gql`
 mutation deleteTrainee($originalId: String) {
-  deleteTrainee(payload: { originalId: $originalId })
+  deleteTrainee(payload: { originalId: $originalId }){
+    status
+    message
+    data{
+      originalId
+    }
+  }
 }
 `;
 

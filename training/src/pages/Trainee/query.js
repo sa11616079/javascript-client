@@ -4,6 +4,7 @@ const GET_TRAINEE = gql`
 query GetTrainee($skip: Int, $limit: Int) {
   getAllTrainees(payload: {skip: $skip, limit: $limit}) {
     records{
+      role,
       name,
       email,
       createdAt,
